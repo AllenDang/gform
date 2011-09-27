@@ -50,15 +50,15 @@ func (this *PushButton) init(parent Controller) {
     RegMsgHandler(this.hwnd, this)
 }
 
-func (this *PushButton) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
+func (this *PushButton) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_LBUTTONDOWN:
-        user32.SetCapture(hwnd)
+        user32.SetCapture(this.Handle())
     case w32.WM_LBUTTONUP:
         user32.ReleaseCapture()
     }
 
-    return this.W32Control.WndProc(hwnd, msg, wparam, lparam)
+    return this.W32Control.WndProc(msg, wparam, lparam)
 }
 
 type CheckBox struct {

@@ -75,7 +75,7 @@ func (this *Form) SetSizable(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_THICKFRAME)
 }
 
-func (this *Form) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
+func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     if this.isDialog {
         switch msg {
         case w32.WM_INITDIALOG:
@@ -83,9 +83,9 @@ func (this *Form) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintp
         case w32.WM_NOTIFY:
             nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
             if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
-                ret := msgHandler.WndProc(nm.HwndFrom, msg, wparam, lparam)
+                ret := msgHandler.WndProc(msg, wparam, lparam)
                 if ret != 0 {
-                    user32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
+                    user32.SetWindowLong(this.Handle(), w32.DWL_MSGRESULT, uint32(ret))
                     return w32.TRUE
                 }
             }
@@ -95,16 +95,16 @@ func (this *Form) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintp
             if lparam != 0 { //Control
                 h := w32.HWND(lparam)
                 if msgHandler := GetMsgHandler(h); msgHandler != nil {
-                    ret := msgHandler.WndProc(h, msg, wparam, lparam)
+                    ret := msgHandler.WndProc(msg, wparam, lparam)
                     if ret != 0 {
-                        user32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
+                        user32.SetWindowLong(this.Handle(), w32.DWL_MSGRESULT, uint32(ret))
                         return w32.TRUE
                     }
                 }
             }
             switch w32.LOWORD(uint(wparam)) {
             case w32.IDCANCEL:
-                user32.DestroyWindow(hwnd)
+                user32.DestroyWindow(this.Handle())
                 return w32.TRUE
             }
         }
@@ -114,22 +114,22 @@ func (this *Form) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintp
         case w32.WM_NOTIFY:
             nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
             if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
-                return msgHandler.WndProc(nm.HwndFrom, msg, wparam, lparam)
+                return msgHandler.WndProc(msg, wparam, lparam)
             }
         case w32.WM_COMMAND:
             if lparam != 0 { //Control
                 h := w32.HWND(lparam)
                 if msgHandler := GetMsgHandler(h); msgHandler != nil {
-                    return msgHandler.WndProc(h, msg, wparam, lparam)
+                    return msgHandler.WndProc(msg, wparam, lparam)
                 }
             }
         case w32.WM_CLOSE:
-            user32.DestroyWindow(hwnd)
+            user32.DestroyWindow(this.Handle())
         case w32.WM_DESTROY:
             user32.PostQuitMessage(0)
         }
 
-        return user32.DefWindowProc(hwnd, msg, wparam, lparam)
+        return user32.DefWindowProc(this.Handle(), msg, wparam, lparam)
     }
 
     return 0

@@ -36,7 +36,7 @@ func genDropFilesEventArg(wparam uintptr) *DropFilesEventArg {
 
 func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
     if msgHandler := GetMsgHandler(hwnd); msgHandler != nil {
-        ret := msgHandler.WndProc(hwnd, msg, wparam, lparam)
+        ret := msgHandler.WndProc(msg, wparam, lparam)
         if controller, ok := msgHandler.(Controller); ok {
             switch msg {
             case w32.WM_DROPFILES:

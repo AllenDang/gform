@@ -103,7 +103,7 @@ func (this *ListView) OnEndLabelEdit() *LVEndLabelEditEventManagerA {
     return &this.onEndLabelEditEventManager
 }
 
-func (this *ListView) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
+func (this *ListView) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_NOTIFY:
         nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
@@ -113,12 +113,11 @@ func (this *ListView) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) u
         case w32.LVN_ENDLABELEDITW:
             nmdi := (*w32.NMLVDISPINFO)(unsafe.Pointer(lparam))
             if nmdi.Item.PszText != nil {
-                str := UTF16PtrToString(nmdi.Item.PszText)
-                this.onEndLabelEditEventManager.Fire(this, int(nmdi.Item.IItem), str)
+                this.onEndLabelEditEventManager.Fire(this, &LVEndLabelEditEventArg{Item:&nmdi.Item})
                 return w32.TRUE
             }
         }
     }
 
-    return this.W32Control.WndProc(hwnd, msg, wparam, lparam)
+    return this.W32Control.WndProc(msg, wparam, lparam)
 }

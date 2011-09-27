@@ -16,6 +16,6 @@ func (this *CustomControl) Init(parent Controller) {
 	RegMsgHandler(this.hwnd, this)
 }
 
-func (this *CustomControl) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
-    return user32.DefWindowProc(hwnd, msg, wparam, lparam)
+func (this *CustomControl) WndProc(msg uint, wparam, lparam uintptr) uintptr {
+    return user32.DefWindowProc(this.Handle(), msg, wparam, lparam)
 }

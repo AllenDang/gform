@@ -165,10 +165,10 @@ type LVEndLabelEditEventManagerA struct {
     handlers vector.Vector
 }
 
-func (this *LVEndLabelEditEventManagerA) Fire(sender *ListView, index int, caption string) {
+func (this *LVEndLabelEditEventManagerA) Fire(sender *ListView, arg *LVEndLabelEditEventArg) {
     for _, v := range this.handlers {
         if f, ok := v.(LVEndLabelEditEventHandlerA); ok {
-            f(sender, index, caption)
+            f(sender, arg)
         }
     }
 }

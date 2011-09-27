@@ -5,7 +5,7 @@ import (
 )
 
 type MsgHandler interface {
-    WndProc(hwnd w32.HWND, msg uint, wparam ,lparam uintptr) uintptr
+    WndProc(msg uint, wparam ,lparam uintptr) uintptr
 }
 
 func RegMsgHandler(hwnd w32.HWND, msgHandler MsgHandler) {

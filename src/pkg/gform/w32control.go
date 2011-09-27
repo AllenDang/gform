@@ -32,6 +32,6 @@ func (this *W32Control) attach(parent Controller, dlgItemID int) {
     this.ControlBase.init(parent)
 }
 
-func (this *W32Control) WndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
+func (this *W32Control) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     return user32.CallWindowProc(this.originalWndProc, this.hwnd, msg, wparam, lparam)
 }
