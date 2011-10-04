@@ -5,5 +5,5 @@ import (
 )
 
 func init() {
-    msgHandlerRegistry = make(map[w32.HWND]MsgHandler)
+    gControllerRegistry = make(map[w32.HWND]Controller)
 }

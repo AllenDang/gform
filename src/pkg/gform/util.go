@@ -100,7 +100,7 @@ func RegisterClass(className string, wndproc uintptr) {
 
 func RegClassOnlyOnce(className string) {
     isExists := false
-    for _, class := range registeredClasses {
+    for _, class := range gRegisteredClasses {
         if class == className {
             isExists = true
             break
@@ -109,6 +109,6 @@ func RegClassOnlyOnce(className string) {
 
     if !isExists {
         RegisterClass(className, GeneralWndprocCallBack)
-        registeredClasses.Push(className)
+        gRegisteredClasses.Push(className)
     }
 }

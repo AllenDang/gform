@@ -4,23 +4,19 @@ import (
     "w32"
 )
 
-type MsgHandler interface {
-    WndProc(msg uint, wparam ,lparam uintptr) uintptr
-}
-
-func RegMsgHandler(hwnd w32.HWND, msgHandler MsgHandler) {
-    if _, isExists := msgHandlerRegistry[hwnd]; !isExists {
-        msgHandlerRegistry[hwnd] = msgHandler
+func RegMsgHandler(controller Controller) {
+    if _, isExists := gControllerRegistry[controller.Handle()]; !isExists {
+        gControllerRegistry[controller.Handle()] = controller
     }
 }
 
 func UnRegMsgHandler(hwnd w32.HWND) {
-    msgHandlerRegistry[hwnd] = nil, false
+    gControllerRegistry[hwnd] = nil, false
 }
 
-func GetMsgHandler(hwnd w32.HWND) MsgHandler {
-    if msgHandler, isExists := msgHandlerRegistry[hwnd]; isExists {
-        return msgHandler
+func GetMsgHandler(hwnd w32.HWND) Controller {
+    if controller, isExists := gControllerRegistry[hwnd]; isExists {
+        return controller
     }
 
     return nil

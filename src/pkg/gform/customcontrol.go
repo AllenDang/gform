@@ -13,7 +13,7 @@ func (this *CustomControl) Init(parent Controller) {
 	RegClassOnlyOnce("gform_customcontrol")
 	this.hwnd = CreateWindow("gform_customcontrol", parent, 0, w32.WS_CHILD|w32.WS_VISIBLE)
     this.ControlBase.init(parent)
-	RegMsgHandler(this.hwnd, this)
+	RegMsgHandler(this)
 }
 
 func (this *CustomControl) WndProc(msg uint, wparam, lparam uintptr) uintptr {

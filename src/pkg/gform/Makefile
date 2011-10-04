@@ -18,6 +18,7 @@ GOFILES=\
 	controlbase.go\
 	wndproc.go\
 	w32control.go\
+	dialog.go\
 	form.go\
 	customcontrol.go\
 	buttons.go\

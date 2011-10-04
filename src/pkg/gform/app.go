@@ -8,10 +8,6 @@ import (
     "w32/comctl32"
 )
 
-func GetAppInstance() w32.HINSTANCE {
-    return gAppInstance
-}
-
 func Init() {
     gAppInstance = kernel32.GetModuleHandle("")
     if gAppInstance == 0 {
@@ -26,20 +22,43 @@ func Init() {
     comctl32.InitCommonControlsEx(&initCtrls)
 }
 
+func GetAppInstance() w32.HINSTANCE {
+    return gAppInstance
+}
+
+func PreTranslateMessage(msg *w32.MSG) bool {
+    // This functions is called by the MessageLoop. It processes the
+    // keyboard accelerator keys and calls Controller.PreTranslateMessage for
+    // keyboard and mouse events.
+
+    processed := false
+
+    if (msg.Message >= w32.WM_KEYFIRST && msg.Message <= w32.WM_KEYLAST) ||
+        (msg.Message >= w32.WM_MOUSEFIRST && msg.Message <= w32.WM_MOUSELAST) {
+
+        if msg.Hwnd != 0 {
+            if controller := GetMsgHandler(msg.Hwnd); controller != nil {
+                // Search the chain of parents for pretranslated messages.
+                for p := controller; p != nil; p = p.Parent() {
+                    if processed = p.PreTranslateMessage(msg); processed {
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    return processed
+}
+
 func RunMainLoop() int {
     var m w32.MSG
-    var ret int
-    for {
-        ret = user32.GetMessage(&m, 0, 0, 0)
-        if ret == 0 {
-            break
-        }
-        if ret == -1 {
-            panic("Error in App.Run.GetMessage")
-        }
 
-        user32.TranslateMessage(&m)
-        user32.DispatchMessage(&m)
+    for user32.GetMessage(&m, 0, 0, 0) != 0 {
+        if !PreTranslateMessage(&m) {
+            user32.TranslateMessage(&m)
+            user32.DispatchMessage(&m)
+        }
     }
 
     return int(m.WParam)

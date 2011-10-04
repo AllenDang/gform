@@ -8,10 +8,10 @@ type GeneralEventManager struct {
     handlers vector.Vector
 }
 
-func (this *GeneralEventManager) Fire() {
+func (this *GeneralEventManager) Fire(sender Controller) {
     for _, v := range this.handlers {
         if f, ok := v.(GeneralEventHandler); ok {
-            f()
+            f(sender)
         }
     }
 }

@@ -43,22 +43,22 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
                 controller.OnDropFilesA().Fire(controller, genDropFilesEventArg(wparam))
             case w32.WM_LBUTTONDOWN:
                 controller.OnLBDownA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnLBDown().Fire()
+                controller.OnLBDown().Fire(controller)
             case w32.WM_LBUTTONUP:
                 controller.OnLBUpA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnLBUp().Fire()
+                controller.OnLBUp().Fire(controller)
             case w32.WM_MBUTTONDOWN:
                 controller.OnMBDownA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnMBDown().Fire()
+                controller.OnMBDown().Fire(controller)
             case w32.WM_MBUTTONUP:
                 controller.OnMBUpA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnMBUp().Fire()
+                controller.OnMBUp().Fire(controller)
             case w32.WM_RBUTTONDOWN:
                 controller.OnRBDownA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnRBDown().Fire()
+                controller.OnRBDown().Fire(controller)
             case w32.WM_RBUTTONUP:
                 controller.OnRBUpA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnRBUp().Fire()
+                controller.OnRBUp().Fire(controller)
             case w32.WM_PAINT:
                 canvas := NewCanvasFromHwnd(hwnd)
                 controller.OnPaintA().Fire(controller, &PaintEventArg{Canvas: canvas})

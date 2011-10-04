@@ -8,9 +8,9 @@ import (
 
 //Private global variables.
 var (
-    gAppInstance       w32.HINSTANCE
-    msgHandlerRegistry map[w32.HWND]MsgHandler
-    registeredClasses  vector.StringVector
+    gAppInstance        w32.HINSTANCE
+    gControllerRegistry map[w32.HWND]Controller
+    gRegisteredClasses  vector.StringVector
 )
 
 //Public global variables.

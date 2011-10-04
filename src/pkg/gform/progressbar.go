@@ -20,7 +20,7 @@ func NewProgressBar(parent Controller) *ProgressBar {
 
 func (this *ProgressBar) init(parent Controller) {
     this.W32Control.init(w32.PROGRESS_CLASS, parent, 0, w32.WS_CHILD|w32.WS_VISIBLE)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }
 
 func (this *ProgressBar) Value() uint {

@@ -22,14 +22,14 @@ func NewEdit(parent Controller) *Edit {
 func AttachEdit(parent Controller, id int) *Edit {
     edt := new(Edit)
     edt.attach(parent, id)
-    RegMsgHandler(edt.Handle(), edt)
+    RegMsgHandler(edt)
 
     return edt
 }
 
 func (this *Edit) init(parent Controller) {
     this.W32Control.init("EDIT", parent, w32.WS_EX_CLIENTEDGE, w32.WS_CHILD|w32.WS_VISIBLE|w32.WS_TABSTOP|w32.ES_LEFT)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }
 
 func (this *Edit) SetReadOnly(isReadOnly bool) {

@@ -22,12 +22,12 @@ func NewLabel(parent Controller) *Label {
 func AttachLabel(parent Controller, id int) *Label {
     lb := new(Label)
     lb.attach(parent, id)
-    RegMsgHandler(lb.Handle(), lb)
+    RegMsgHandler(lb)
 
     return lb
 }
 
 func (this *Label) init(parent Controller) {
     this.W32Control.init("STATIC", parent, 0, w32.WS_CHILD|w32.WS_VISIBLE|w32.SS_LEFTNOWORDWRAP)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }

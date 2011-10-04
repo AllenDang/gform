@@ -1,6 +1,6 @@
 package gform
 
-type GeneralEventHandler func()
+type GeneralEventHandler func(sender Controller)
 
 type MouseEventHandlerA func(sender Controller, arg *MouseEventArg)
 

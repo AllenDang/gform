@@ -152,6 +152,10 @@ func (this *ControlBase) InvokeRequired() bool {
     return windowThreadId != currentThreadId
 }
 
+func (this *ControlBase) PreTranslateMessage(msg *w32.MSG) bool {
+    return false
+}
+
 //Events
 func (this *ControlBase) OnDropFilesA() *DropFilesEventManagerA {
     return &this.onDropFilesA

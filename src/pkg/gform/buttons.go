@@ -40,14 +40,14 @@ func NewPushButton(parent Controller) *PushButton {
 func AttachPushButton(parent Controller, id int) *PushButton {
     pb := new(PushButton)
     pb.attach(parent, id)
-    RegMsgHandler(pb.Handle(), pb)
+    RegMsgHandler(pb)
 
     return pb
 }
 
 func (this *PushButton) init(parent Controller) {
     this.W32Control.init("BUTTON", parent, 0, w32.BS_NOTIFY|w32.WS_TABSTOP|w32.WS_VISIBLE|w32.WS_CHILD)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }
 
 func (this *PushButton) WndProc(msg uint, wparam, lparam uintptr) uintptr {
@@ -79,7 +79,7 @@ func NewCheckBox(parent Controller) *CheckBox {
 func AttachCheckBox(parent Controller, id int) *CheckBox {
     cb := new(CheckBox)
     cb.attach(parent, id)
-    RegMsgHandler(cb.Handle(), cb)
+    RegMsgHandler(cb)
 
     return cb
 }
@@ -87,7 +87,7 @@ func AttachCheckBox(parent Controller, id int) *CheckBox {
 
 func (this *CheckBox) init(parent Controller) {
     this.W32Control.init("BUTTON", parent, 0, w32.WS_TABSTOP|w32.WS_VISIBLE|w32.WS_CHILD|w32.BS_AUTOCHECKBOX)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }
 
 type RadioButton struct {
@@ -108,14 +108,14 @@ func NewRadioButton(parent Controller) *RadioButton {
 func AttachRadioButton(parent Controller, id int) *RadioButton {
     rb := new(RadioButton)
     rb.attach(parent, id)
-    RegMsgHandler(rb.Handle(), rb)
+    RegMsgHandler(rb)
 
     return rb
 }
 
 func (this *RadioButton) init(parent Controller) {
     this.W32Control.init("BUTTON", parent, 0, w32.WS_TABSTOP|w32.WS_VISIBLE|w32.WS_CHILD|w32.BS_AUTORADIOBUTTON)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }
 
 type GroupBox struct {
@@ -136,12 +136,12 @@ func NewGroupBox(parent Controller) *GroupBox {
 func AttachGroupBox(parent Controller, id int) *GroupBox {
     gb := new(GroupBox)
     gb.attach(parent, id)
-    RegMsgHandler(gb.Handle(), gb)
+    RegMsgHandler(gb)
 
     return gb
 }
 
 func (this *GroupBox) init(parent Controller) {
     this.W32Control.init("BUTTON", parent, 0, w32.WS_CHILD|w32.WS_VISIBLE|w32.WS_GROUP|w32.BS_GROUPBOX)
-    RegMsgHandler(this.hwnd, this)
+    RegMsgHandler(this)
 }

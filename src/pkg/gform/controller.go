@@ -25,6 +25,8 @@ type Controller interface {
     Font() *Font
     SetFont(font *Font)
     InvokeRequired() bool
+    PreTranslateMessage(msg *w32.MSG) bool
+    WndProc(msg uint, wparam, lparam uintptr) uintptr
 
     //Drag and drop events
     OnDropFilesA() *DropFilesEventManagerA

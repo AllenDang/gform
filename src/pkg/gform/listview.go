@@ -26,7 +26,7 @@ func NewListView(parent Controller) *ListView {
 func AttachListView(parent Controller, id int) *ListView {
     lv := new(ListView)
     lv.attach(parent, id)
-    RegMsgHandler(lv.Handle(), lv)
+    RegMsgHandler(lv)
 
     user32.SendMessage(lv.Handle(), w32.LVM_SETUNICODEFORMAT, w32.TRUE, 0)
     return lv
@@ -34,7 +34,7 @@ func AttachListView(parent Controller, id int) *ListView {
 
 func (this *ListView) init(parent Controller) {
     this.W32Control.init("SysListView32", parent, 0, w32.WS_CHILD|w32.WS_VISIBLE|w32.WS_BORDER|w32.LVS_REPORT|w32.LVS_EDITLABELS)
-    RegMsgHandler(this.Handle(), this)
+    RegMsgHandler(this)
 }
 
 func (this *ListView) SetSingleSelect(enable bool) {
@@ -43,6 +43,10 @@ func (this *ListView) SetSingleSelect(enable bool) {
 
 func (this *ListView) SetSortHeader(enable bool) {
     ToggleStyle(this.Handle(), enable, w32.LVS_NOSORTHEADER)
+}
+
+func (this *ListView) SetSortAscending(enable bool) {
+    ToggleStyle(this.Handle(), enable, w32.LVS_SORTASCENDING)
 }
 
 func (this *ListView) SetEditLabels(enable bool) {
@@ -57,7 +61,19 @@ func (this *ListView) SetFullRowSelect(enable bool) {
     }
 }
 
-func (this *ListView) CountItem() int {
+func (this *ListView) SetEnableDoubleBuffer(enable bool) {
+    if enable {
+        user32.SendMessage(this.Handle(), w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_DOUBLEBUFFER)
+    } else {
+        user32.SendMessage(this.Handle(), w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_DOUBLEBUFFER, 0)
+    }
+}
+
+func (this *ListView) SetItemCount(count int) bool {
+    return user32.SendMessage(this.Handle(), w32.LVM_SETITEMCOUNT, uintptr(count), 0) != 0
+}
+
+func (this *ListView) GetItemCount() int {
     return int(user32.SendMessage(this.Handle(), w32.LVM_GETITEMCOUNT, 0, 0))
 }
 
@@ -83,7 +99,7 @@ func (this *ListView) InsertItem(caption string, index int) {
 }
 
 func (this *ListView) AddItem(caption string) {
-    this.InsertItem(caption, this.CountItem())
+    this.InsertItem(caption, this.GetItemCount())
 }
 
 func (this *ListView) InsertLvColumn(lvColumn *w32.LVCOLUMN, iCol int) {
@@ -91,11 +107,11 @@ func (this *ListView) InsertLvColumn(lvColumn *w32.LVCOLUMN, iCol int) {
 }
 
 func (this *ListView) InsertLvItem(lvItem *w32.LVITEM) {
-    if this.InvokeRequired() {
-        user32.PostMessage(this.Handle(), w32.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(lvItem)))
-    } else {
-        user32.SendMessage(this.Handle(), w32.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(lvItem)))
-    }
+    user32.SendMessage(this.Handle(), w32.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(lvItem)))
+}
+
+func (this *ListView) DeleteAllItems() bool {
+    return user32.SendMessage(this.Handle(), w32.LVM_DELETEALLITEMS, 0, 0) == w32.TRUE
 }
 
 // Event publishers
