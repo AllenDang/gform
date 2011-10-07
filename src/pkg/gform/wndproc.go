@@ -39,6 +39,10 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
         ret := msgHandler.WndProc(msg, wparam, lparam)
         if controller, ok := msgHandler.(Controller); ok {
             switch msg {
+            case w32.WM_KILLFOCUS:
+                controller.OnKillFocus().Fire(controller)
+            case w32.WM_SETFOCUS:
+                controller.OnSetFocus().Fire(controller)
             case w32.WM_DROPFILES:
                 controller.OnDropFilesA().Fire(controller, genDropFilesEventArg(wparam))
             case w32.WM_LBUTTONDOWN:

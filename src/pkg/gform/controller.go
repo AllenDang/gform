@@ -28,6 +28,10 @@ type Controller interface {
     PreTranslateMessage(msg *w32.MSG) bool
     WndProc(msg uint, wparam, lparam uintptr) uintptr
 
+    // Focus events
+    OnKillFocus() *GeneralEventManager
+    OnSetFocus() *GeneralEventManager
+
     //Drag and drop events
     OnDropFilesA() *DropFilesEventManagerA
 

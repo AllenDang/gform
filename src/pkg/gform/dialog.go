@@ -45,6 +45,8 @@ func (this *Dialog) Show() {
 
     this.onLoad.Fire(this)
 
+    ico := NewIconFromResource(GetAppInstance(), 101)
+    this.SetIcon(0, ico)
     this.Form.Show()
 }
 
@@ -93,8 +95,6 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
                 return w32.TRUE
             }
         }
-    case w32.WM_DESTROY:
-        user32.PostQuitMessage(0)
     case w32.WM_COMMAND:
         if lparam != 0 { //Control
             h := w32.HWND(lparam)
@@ -111,6 +111,8 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             user32.DestroyWindow(this.hwnd)
             return w32.TRUE
         }
+    case w32.WM_DESTROY:
+        user32.PostQuitMessage(0)
     }
     return w32.FALSE
 }

@@ -7,6 +7,8 @@ import (
 
 type Edit struct {
     W32Control
+
+    onChange GeneralEventManager
 }
 
 func NewEdit(parent Controller) *Edit {
@@ -32,6 +34,24 @@ func (this *Edit) init(parent Controller) {
     RegMsgHandler(this)
 }
 
+//Events
+func (this *Edit) OnChange() *GeneralEventManager {
+    return &this.onChange
+}
+
+//Public methods
 func (this *Edit) SetReadOnly(isReadOnly bool) {
     user32.SendMessage(this.hwnd, w32.EM_SETREADONLY, uintptr(w32.BoolToBOOL(isReadOnly)), 0)
+}
+
+func (this *Edit) WndProc(msg uint, wparam, lparam uintptr) uintptr {
+    switch msg {
+    case w32.WM_COMMAND:
+        switch w32.HIWORD(uint(wparam)) {
+            case w32.EN_CHANGE:
+                this.onChange.Fire(this)
+        }
+    }
+
+    return this.W32Control.WndProc(msg, wparam, lparam)
 }

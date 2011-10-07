@@ -199,3 +199,42 @@ func (this *LVEndLabelEditEventManagerA) Detach(handler LVEndLabelEditEventHandl
         }
     }
 }
+
+type LVDBLClickEventManagerA struct {
+    handlers vector.Vector
+}
+
+func (this *LVDBLClickEventManagerA) Fire(sender *ListView, arg *LVDBLClickEventArg) {
+    for _, v := range this.handlers {
+        if f, ok := v.(LVDBLClickEventHandlerA); ok {
+            f(sender, arg)
+        }
+    }
+}
+
+func (this *LVDBLClickEventManagerA) Attach(handler LVDBLClickEventHandlerA) {
+    isExists := false
+    for _, v := range this.handlers {
+        if f, ok := v.(LVDBLClickEventHandlerA); ok {
+            if f == handler {
+                isExists = true
+                break
+            }
+        }
+    }
+
+    if !isExists {
+        this.handlers.Push(handler)
+    }
+}
+
+func (this *LVDBLClickEventManagerA) Detach(handler LVDBLClickEventHandlerA) {
+    for i, v := range this.handlers {
+        if f, ok := v.(LVDBLClickEventHandlerA); ok {
+            if f == handler {
+                this.handlers.Delete(i)
+                break
+            }
+        }
+    }
+}

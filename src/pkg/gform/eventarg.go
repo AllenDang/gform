@@ -22,3 +22,7 @@ type PaintEventArg struct {
 type LVEndLabelEditEventArg struct {
 	Item *w32.LVITEM
 }
+
+type LVDBLClickEventArg struct {
+	NmItem *w32.NMITEMACTIVATE
+}

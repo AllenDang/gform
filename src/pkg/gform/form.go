@@ -44,6 +44,15 @@ func (this *Form) Center() {
     }
 }
 
+// IconType: 1 - ICON_BIG; 0 - ICON_SMALL
+func (this *Form) SetIcon(iconType int, icon *Icon) {
+    if iconType > 1 {
+        panic("IconType is invalid")
+    }
+
+    user32.SendMessage(this.hwnd, w32.WM_SETICON, uintptr(iconType), uintptr(icon.Handle()))
+}
+
 func (this *Form) SetMaxButtonEnabled(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_MAXIMIZEBOX)
 }
@@ -58,12 +67,12 @@ func (this *Form) SetSizable(b bool) {
 
 func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
-    case w32.WM_NOTIFY:
+    case w32.WM_NOTIFY: //Reflect
         nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
         if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
             return msgHandler.WndProc(msg, wparam, lparam)
         }
-    case w32.WM_COMMAND:
+    case w32.WM_COMMAND: //Reflect
         if lparam != 0 { //Control
             h := w32.HWND(lparam)
             if msgHandler := GetMsgHandler(h); msgHandler != nil {

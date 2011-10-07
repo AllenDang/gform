@@ -13,6 +13,10 @@ type ControlBase struct {
 
     isForm bool
 
+    //Focus events
+    onKillFocus GeneralEventManager
+    onSetFocus  GeneralEventManager
+
     //Drag and drop events
     onDropFilesA DropFilesEventManagerA
 
@@ -157,6 +161,14 @@ func (this *ControlBase) PreTranslateMessage(msg *w32.MSG) bool {
 }
 
 //Events
+func (this *ControlBase) OnKillFocus() *GeneralEventManager {
+    return &this.onKillFocus
+}
+
+func (this *ControlBase) OnSetFocus() *GeneralEventManager {
+    return &this.onSetFocus
+}
+
 func (this *ControlBase) OnDropFilesA() *DropFilesEventManagerA {
     return &this.onDropFilesA
 }
