@@ -16,7 +16,7 @@ func Init() {
 
     // Initialize the common controls
     var initCtrls w32.INITCOMMONCONTROLSEX
-    initCtrls.DwSize = uint32(unsafe.Sizeof(initCtrls))
+    initCtrls.DwSize = uint(unsafe.Sizeof(initCtrls))
     initCtrls.DwICC = w32.ICC_LISTVIEW_CLASSES | w32.ICC_PROGRESS_CLASS | w32.ICC_TAB_CLASSES | w32.ICC_TREEVIEW_CLASSES
 
     comctl32.InitCommonControlsEx(&initCtrls)

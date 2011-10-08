@@ -84,7 +84,7 @@ func (this *ListView) InsertColumn(caption string, width int, iCol int) {
     lc.Mask = w32.LVCF_TEXT
     if width != 0 {
         lc.Mask = lc.Mask | w32.LVCF_WIDTH
-        lc.Cx = int32(width)
+        lc.Cx = width
     }
     lc.PszText = syscall.StringToUTF16Ptr(caption)
 
@@ -95,7 +95,7 @@ func (this *ListView) InsertItem(caption string, index int) {
     var li w32.LVITEM
     li.Mask = w32.LVIF_TEXT
     li.PszText = syscall.StringToUTF16Ptr(caption)
-    li.IItem = int32(index)
+    li.IItem = index
 
     this.InsertLvItem(&li)
 }
@@ -122,6 +122,24 @@ func (this *ListView) GetItem(item *w32.LVITEM) bool {
 
 func (this *ListView) GetSelectedCount() uint {
     return uint(user32.SendMessage(this.hwnd, w32.LVM_GETSELECTEDCOUNT, 0, 0))
+}
+
+func (this *ListView) SetImageList(imageList *ImageList, imageListType int) *ImageList {
+    h := user32.SendMessage(this.hwnd, w32.LVM_SETIMAGELIST, uintptr(imageListType), uintptr(imageList.Handle()))
+    if h == 0 {
+        return nil
+    }
+        
+    return &ImageList{w32.HIMAGELIST(h)}
+}
+
+func (this *ListView) GetImageList(imageListType int) *ImageList {
+    h := user32.SendMessage(this.hwnd, w32.LVM_GETIMAGELIST, uintptr(imageListType), 0)
+    if h == 0 {
+        return nil
+    }
+
+    return &ImageList{w32.HIMAGELIST(h)}
 }
 
 // Event publishers

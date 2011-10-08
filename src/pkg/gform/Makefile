@@ -6,6 +6,7 @@ GOFILES=\
 	rect.go\
 	color.go\
 	font.go\
+	imagelist.go\
 	globalvars.go\
 	util.go\
 	canvas.go\

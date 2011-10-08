@@ -34,17 +34,16 @@ func NewIconFromResource(instance w32.HINSTANCE, resId uint16) (*Icon, os.Error)
 	return ico, err
 }
 
-func ExtractIcon(fileName string, index uint) (*Icon, os.Error) {
+func ExtractIcon(fileName string, index int) (*Icon, os.Error) {
 	ico := new(Icon)
 	var err os.Error
-	if ico.handle = shell32.ExtractIcon(fileName, index); ico.handle == 0 {
+	if ico.handle = shell32.ExtractIcon(fileName, index); ico.handle == 0 || ico.handle == 1 {
 		err = os.NewError(fmt.Sprintf("Cannot extract icon from %s at index %v", fileName, index))
 	}
 
 	return ico, err
 }
 
-// Note this function should only be called after "ExtractIcon".
 func (this *Icon) Destroy() bool {
 	return user32.DestroyIcon(this.handle)
 }
