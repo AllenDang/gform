@@ -45,8 +45,9 @@ func (this *Dialog) Show() {
 
     this.onLoad.Fire(this)
 
-    ico := NewIconFromResource(GetAppInstance(), 101)
-    this.SetIcon(0, ico)
+    if ico, err := NewIconFromResource(GetAppInstance(), 101); err == nil {
+        this.SetIcon(0, ico)
+    }
     this.Form.Show()
 }
 
