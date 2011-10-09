@@ -11,6 +11,7 @@ var (
     gAppInstance        w32.HINSTANCE
     gControllerRegistry map[w32.HWND]Controller
     gRegisteredClasses  vector.StringVector
+    gDialogWaiting      *Dialog
 )
 
 //Public global variables.

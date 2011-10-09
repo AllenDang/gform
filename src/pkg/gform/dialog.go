@@ -40,10 +40,8 @@ func (this *Dialog) Show() {
         parentHwnd = this.Parent().Handle()
     }
 
+    gDialogWaiting = this
     this.hwnd = user32.CreateDialog(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack)
-    RegMsgHandler(this)
-
-    this.onLoad.Fire(this)
 
     if ico, err := NewIconFromResource(GetAppInstance(), 101); err == nil {
         this.SetIcon(0, ico)
@@ -59,6 +57,7 @@ func (this *Dialog) ShowModal() int {
         parentHwnd = this.Parent().Handle()
     }
 
+    gDialogWaiting = this
     if this.result = user32.DialogBox(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack); this.result == -1 {
         panic("Failed to create modal dialog box")
     }
@@ -67,12 +66,13 @@ func (this *Dialog) ShowModal() int {
 }
 
 func (this *Dialog) Close() {
-    UnRegMsgHandler(this.hwnd)
     if this.isModal {
         user32.EndDialog(this.hwnd, uintptr(this.result))
     } else {
         user32.DestroyWindow(this.hwnd)
     }
+
+    UnRegMsgHandler(this.hwnd)
 }
 
 func (this *Dialog) PreTranslateMessage(msg *w32.MSG) bool {
@@ -87,6 +87,9 @@ func (this *Dialog) PreTranslateMessage(msg *w32.MSG) bool {
 
 func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
+    case w32.WM_INITDIALOG:
+        gDialogWaiting = nil
+        this.onLoad.Fire(this)
     case w32.WM_NOTIFY:
         nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
         if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
@@ -97,7 +100,7 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             }
         }
     case w32.WM_COMMAND:
-        if lparam != 0 { //Control
+        if lparam != 0 { //Reflict message to control
             h := w32.HWND(lparam)
             if msgHandler := GetMsgHandler(h); msgHandler != nil {
                 ret := msgHandler.WndProc(msg, wparam, lparam)
@@ -108,12 +111,17 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             }
         }
         switch w32.LOWORD(uint(wparam)) {
+        case w32.IDOK:
+            this.Close()
+            return w32.TRUE
         case w32.IDCANCEL:
-            user32.DestroyWindow(this.hwnd)
+            this.Close()
             return w32.TRUE
         }
     case w32.WM_DESTROY:
-        user32.PostQuitMessage(0)
+        if this.parent == nil {
+            Exit()
+        }
     }
     return w32.FALSE
 }

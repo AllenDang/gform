@@ -43,6 +43,12 @@ func (this *GeneralEventManager) Detach(handler GeneralEventHandler) {
     }
 }
 
+func (this *GeneralEventManager) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
+    }
+}
+
 type MouseEventManagerA struct {
     handlers vector.Vector
 }
@@ -79,6 +85,12 @@ func (this *MouseEventManagerA) Detach(handler MouseEventHandlerA) {
                 break
             }
         }
+    }
+}
+
+func (this *MouseEventManagerA) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
     }
 }
 
@@ -121,6 +133,11 @@ func (this *DropFilesEventManagerA) Detach(handler DropFilesEventHandlerA) {
     }
 }
 
+func (this *DropFilesEventManagerA) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
+    }
+}
 
 type PaintEventManagerA struct {
     handlers vector.Vector
@@ -158,6 +175,12 @@ func (this *PaintEventManagerA) Detach(handler PaintEventHandlerA) {
                 break
             }
         }
+    }
+}
+
+func (this *PaintEventManagerA) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
     }
 }
 
@@ -200,6 +223,12 @@ func (this *LVEndLabelEditEventManagerA) Detach(handler LVEndLabelEditEventHandl
     }
 }
 
+func (this *LVEndLabelEditEventManagerA) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
+    }
+}
+
 type LVDBLClickEventManagerA struct {
     handlers vector.Vector
 }
@@ -236,5 +265,11 @@ func (this *LVDBLClickEventManagerA) Detach(handler LVDBLClickEventHandlerA) {
                 break
             }
         }
+    }
+}
+
+func (this *LVDBLClickEventManagerA) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
     }
 }
