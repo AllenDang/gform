@@ -6,7 +6,6 @@ import (
 
 type Controller interface {
     Caption() string
-    Close()
     Enabled() bool
     Focus()
     Handle() w32.HWND

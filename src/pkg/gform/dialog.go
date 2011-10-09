@@ -10,7 +10,6 @@ type Dialog struct {
     Form
 
     isModal  bool
-    result   int
     template *uint16
 
     onLoad GeneralEventManager
@@ -49,7 +48,7 @@ func (this *Dialog) Show() {
     this.Form.Show()
 }
 
-func (this *Dialog) ShowModal() int {
+func (this *Dialog) ShowModal() (result int) {
     this.isModal = true
 
     var parentHwnd w32.HWND
@@ -58,16 +57,16 @@ func (this *Dialog) ShowModal() int {
     }
 
     gDialogWaiting = this
-    if this.result = user32.DialogBox(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack); this.result == -1 {
+    if result = user32.DialogBox(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack); result == -1 {
         panic("Failed to create modal dialog box")
     }
     
-    return this.result
+    return result
 }
 
-func (this *Dialog) Close() {
+func (this *Dialog) Close(result int) {
     if this.isModal {
-        user32.EndDialog(this.hwnd, uintptr(this.result))
+        user32.EndDialog(this.hwnd, uintptr(result))
     } else {
         user32.DestroyWindow(this.hwnd)
     }
@@ -112,10 +111,10 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         }
         switch w32.LOWORD(uint(wparam)) {
         case w32.IDOK:
-            this.Close()
+            this.Close(w32.IDOK)
             return w32.TRUE
         case w32.IDCANCEL:
-            this.Close()
+            this.Close(w32.IDCANCEL)
             return w32.TRUE
         }
     case w32.WM_DESTROY:
