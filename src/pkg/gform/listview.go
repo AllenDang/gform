@@ -120,6 +120,31 @@ func (this *ListView) GetItem(item *w32.LVITEM) bool {
     return user32.SendMessage(this.hwnd, w32.LVM_GETITEM, 0, uintptr(unsafe.Pointer(item))) == w32.TRUE
 }
 
+func (this *ListView) GetItemAtIndex(i int) *w32.LVITEM {
+    var item w32.LVITEM
+    item.Mask = w32.LVIF_PARAM | w32.LVIF_TEXT
+    item.IItem = i
+
+    this.GetItem(&item)
+    return &item
+}
+
+// mask is used to set the LVITEM.Mask for ListView.GetItem which indicates which attributes you'd like to receive
+// of LVITEM.
+func (this *ListView) GetSelectedIndexes(mask uint) []int {
+    items := make([]int, 0)
+
+    var i int = -1
+    for {
+        if i = int(user32.SendMessage(this.hwnd, w32.LVM_GETNEXTITEM, uintptr(i), uintptr(w32.LVNI_SELECTED))); i == -1 {
+            break
+        }
+
+        items = append(items, i)
+    }
+    return items
+}
+
 func (this *ListView) GetSelectedCount() uint {
     return uint(user32.SendMessage(this.hwnd, w32.LVM_GETSELECTEDCOUNT, 0, 0))
 }

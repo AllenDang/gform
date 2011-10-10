@@ -11,16 +11,19 @@ type Dialog struct {
 
     isModal  bool
     template *uint16
+    
+    Data interface{}
 
-    onLoad GeneralEventManager
+    onLoad         GeneralEventManager
+    onOK, onCancel GeneralEventManager
 }
 
-func NewDialogFromTemplate(parent Controller, template *uint16) *Dialog {
+func NewDialogFromResId(parent Controller, resId uint) *Dialog {
     d := new(Dialog)
 
     d.isForm = true
     d.isModal = false
-    d.template = template
+    d.template = w32.MakeIntResource(uint16(resId))
 
     if parent != nil {
         d.parent = parent
@@ -29,11 +32,29 @@ func NewDialogFromTemplate(parent Controller, template *uint16) *Dialog {
     return d
 }
 
+// Events
 func (this *Dialog) OnLoad() *GeneralEventManager {
     return &this.onLoad
 }
 
+func (this *Dialog) OnOK() *GeneralEventManager {
+    return &this.onOK
+}
+
+func (this *Dialog) OnCancel() *GeneralEventManager {
+    return &this.onCancel
+}
+
+// Public methods
 func (this *Dialog) Show() {
+    this.ShowWithData(nil)
+}
+
+func (this *Dialog) ShowModal() {
+    this.ShowModalWithData(nil)
+}
+
+func (this *Dialog) ShowWithData(data interface{}) {
     var parentHwnd w32.HWND
     if this.Parent() != nil {
         parentHwnd = this.Parent().Handle()
@@ -41,15 +62,16 @@ func (this *Dialog) Show() {
 
     gDialogWaiting = this
     this.hwnd = user32.CreateDialog(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack)
-
+    this.Data = data
     if ico, err := NewIconFromResource(GetAppInstance(), 101); err == nil {
         this.SetIcon(0, ico)
     }
     this.Form.Show()
 }
 
-func (this *Dialog) ShowModal() (result int) {
+func (this *Dialog) ShowModalWithData(data interface{}) (result int) {
     this.isModal = true
+    this.Data = data
 
     var parentHwnd w32.HWND
     if this.Parent() != nil {
@@ -60,7 +82,7 @@ func (this *Dialog) ShowModal() (result int) {
     if result = user32.DialogBox(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack); result == -1 {
         panic("Failed to create modal dialog box")
     }
-    
+
     return result
 }
 
@@ -111,9 +133,11 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         }
         switch w32.LOWORD(uint(wparam)) {
         case w32.IDOK:
+            this.onOK.Fire(this)
             this.Close(w32.IDOK)
             return w32.TRUE
         case w32.IDCANCEL:
+            this.onCancel.Fire(this)
             this.Close(w32.IDCANCEL)
             return w32.TRUE
         }
