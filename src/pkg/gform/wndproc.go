@@ -38,7 +38,6 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
     if msg == w32.WM_INITDIALOG && gDialogWaiting != nil {
         gDialogWaiting.hwnd = hwnd
         RegMsgHandler(gDialogWaiting)
-        gDialogWaiting.WndProc(msg, wparam, lparam)
     }
 
     if msgHandler := GetMsgHandler(hwnd); msgHandler != nil {
