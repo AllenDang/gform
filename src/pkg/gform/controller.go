@@ -49,6 +49,9 @@ type Controller interface {
     OnRBDownA() *MouseEventManagerA
     OnRBUpA() *MouseEventManagerA
 
+    //Keyboard events
+    OnKeyUpA() *KeyUpEventManagerA
+
     //Paint events
     OnPaintA() *PaintEventManagerA
 }

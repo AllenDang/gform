@@ -13,14 +13,14 @@ type ControlBase struct {
 
     isForm bool
 
-    //Focus events
+    // Focus events
     onKillFocus GeneralEventManager
     onSetFocus  GeneralEventManager
 
-    //Drag and drop events
+    // Drag and drop events
     onDropFilesA DropFilesEventManagerA
 
-    //Mouse events
+    // Mouse events
     onLBDown GeneralEventManager
     onLBUp   GeneralEventManager
     onMBDown GeneralEventManager
@@ -35,7 +35,10 @@ type ControlBase struct {
     onRBDownA MouseEventManagerA
     onRBUpA   MouseEventManagerA
 
-    //Paint events
+    // Keyboard events
+    onKeyUpA KeyUpEventManagerA
+
+    // Paint events
     onPaintA PaintEventManagerA
 }
 
@@ -223,4 +226,8 @@ func (this *ControlBase) OnRBUpA() *MouseEventManagerA {
 
 func (this *ControlBase) OnPaintA() *PaintEventManagerA {
     return &this.onPaintA
+}
+
+func (this *ControlBase) OnKeyUpA() *KeyUpEventManagerA {
+    return &this.onKeyUpA
 }

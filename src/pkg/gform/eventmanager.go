@@ -273,3 +273,48 @@ func (this *LVDBLClickEventManagerA) Clean() {
         this.handlers.Delete(0)
     }
 }
+
+type KeyUpEventManagerA struct {
+    handlers vector.Vector
+}
+
+func (this *KeyUpEventManagerA) Fire(sender Controller, arg *KeyUpEventArg) {
+    for _, v := range this.handlers {
+        if f, ok := v.(KeyUpEventHandlerA); ok {
+            f(sender, arg)
+        }
+    }
+}
+
+func (this *KeyUpEventManagerA) Attach(handler KeyUpEventHandlerA) {
+    isExists := false
+    for _, v := range this.handlers {
+        if f, ok := v.(KeyUpEventHandlerA); ok {
+            if f == handler {
+                isExists = true
+                break
+            }
+        }
+    }
+
+    if !isExists {
+        this.handlers.Push(handler)
+    }
+}
+
+func (this *KeyUpEventManagerA) Detach(handler KeyUpEventHandlerA) {
+    for i, v := range this.handlers {
+        if f, ok := v.(KeyUpEventHandlerA); ok {
+            if f == handler {
+                this.handlers.Delete(i)
+                break
+            }
+        }
+    }
+}
+
+func (this *KeyUpEventManagerA) Clean() {
+    for this.handlers.Len() > 0 {
+        this.handlers.Delete(0)
+    }
+}

@@ -25,11 +25,27 @@ func NewDialogFromResId(parent Controller, resId uint) *Dialog {
     d.isModal = false
     d.template = w32.MakeIntResource(uint16(resId))
 
+    d.OnOK().Attach(dlg_OnOK)
+    d.OnCancel().Attach(dlg_OnCancel)
+
     if parent != nil {
         d.parent = parent
     }
 
     return d
+}
+
+// internal event handlers
+func dlg_OnOK(sender Controller) {
+    if d, ok := sender.(*Dialog); ok {
+        d.Close(w32.IDOK)
+    }
+}
+
+func dlg_OnCancel(sender Controller) {
+    if d, ok := sender.(*Dialog); ok {
+        d.Close(w32.IDCANCEL)
+    }
 }
 
 // Events
@@ -50,8 +66,8 @@ func (this *Dialog) Show() {
     this.ShowWithData(nil)
 }
 
-func (this *Dialog) ShowModal() {
-    this.ShowModalWithData(nil)
+func (this *Dialog) ShowModal() int {
+    return this.ShowModalWithData(nil)
 }
 
 func (this *Dialog) ShowWithData(data interface{}) {
@@ -134,11 +150,9 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         switch w32.LOWORD(uint(wparam)) {
         case w32.IDOK:
             this.onOK.Fire(this)
-            this.Close(w32.IDOK)
             return w32.TRUE
         case w32.IDCANCEL:
             this.onCancel.Fire(this)
-            this.Close(w32.IDCANCEL)
             return w32.TRUE
         }
     case w32.WM_DESTROY:

@@ -39,23 +39,23 @@ func (this *ListView) init(parent Controller) {
     RegMsgHandler(this)
 }
 
-func (this *ListView) SetSingleSelect(enable bool) {
+func (this *ListView) EnableSingleSelect(enable bool) {
     ToggleStyle(this.hwnd, enable, w32.LVS_SINGLESEL)
 }
 
-func (this *ListView) SetSortHeader(enable bool) {
+func (this *ListView) EnableSortHeader(enable bool) {
     ToggleStyle(this.hwnd, enable, w32.LVS_NOSORTHEADER)
 }
 
-func (this *ListView) SetSortAscending(enable bool) {
+func (this *ListView) EnableSortAscending(enable bool) {
     ToggleStyle(this.hwnd, enable, w32.LVS_SORTASCENDING)
 }
 
-func (this *ListView) SetEditLabels(enable bool) {
+func (this *ListView) EnableEditLabels(enable bool) {
     ToggleStyle(this.hwnd, enable, w32.LVS_EDITLABELS)
 }
 
-func (this *ListView) SetFullRowSelect(enable bool) {
+func (this *ListView) EnableFullRowSelect(enable bool) {
     if enable {
         user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_FULLROWSELECT)
     } else {
@@ -63,11 +63,19 @@ func (this *ListView) SetFullRowSelect(enable bool) {
     }
 }
 
-func (this *ListView) SetEnableDoubleBuffer(enable bool) {
+func (this *ListView) EnableDoubleBuffer(enable bool) {
     if enable {
         user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_DOUBLEBUFFER)
     } else {
         user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_DOUBLEBUFFER, 0)
+    }
+}
+
+func (this *ListView) EnableHotTrack(enable bool) {
+    if enable {
+        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_TRACKSELECT)
+    } else {
+        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_TRACKSELECT, 0)
     }
 }
 
@@ -131,8 +139,8 @@ func (this *ListView) GetItemAtIndex(i int) *w32.LVITEM {
 
 // mask is used to set the LVITEM.Mask for ListView.GetItem which indicates which attributes you'd like to receive
 // of LVITEM.
-func (this *ListView) GetSelectedIndexes(mask uint) []int {
-    items := make([]int, 0)
+func (this *ListView) GetSelectedItems(mask uint) []*w32.LVITEM {
+    items := make([]*w32.LVITEM, 0)
 
     var i int = -1
     for {
@@ -140,7 +148,12 @@ func (this *ListView) GetSelectedIndexes(mask uint) []int {
             break
         }
 
-        items = append(items, i)
+        var item w32.LVITEM
+        item.Mask = mask
+        item.IItem = i
+        if this.GetItem(&item) {
+            items = append(items, &item)
+        }
     }
     return items
 }

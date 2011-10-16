@@ -72,6 +72,8 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
                 canvas := NewCanvasFromHwnd(hwnd)
                 controller.OnPaintA().Fire(controller, &PaintEventArg{Canvas: canvas})
                 canvas.Dispose()
+            case w32.WM_KEYUP:
+                controller.OnKeyUpA().Fire(controller, &KeyUpEventArg{int(wparam), int(lparam)})
             }
         }
         return ret

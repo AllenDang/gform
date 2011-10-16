@@ -26,3 +26,7 @@ type LVEndLabelEditEventArg struct {
 type LVDBLClickEventArg struct {
 	NmItem *w32.NMITEMACTIVATE
 }
+
+type KeyUpEventArg struct {
+	VKey, Code int
+}
