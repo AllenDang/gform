@@ -103,6 +103,8 @@ func (this *Dialog) ShowModalWithData(data interface{}) (result int) {
 }
 
 func (this *Dialog) Close(result int) {
+    this.onClose.Fire(this)
+    
     if this.isModal {
         user32.EndDialog(this.hwnd, uintptr(result))
     } else {

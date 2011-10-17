@@ -10,6 +10,8 @@ type Form struct {
     ControlBase
 
     isDialog bool
+
+    onClose GeneralEventManager
 }
 
 func NewForm(parent Controller) *Form {
@@ -31,6 +33,11 @@ func (this *Form) init(parent Controller) {
     this.ControlBase.init(parent)
 
     RegMsgHandler(this)
+}
+
+// Events
+func (this *Form) OnClose() *GeneralEventManager {
+    return &this.onClose
 }
 
 // Public methods
@@ -80,6 +87,7 @@ func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             }
         }
     case w32.WM_CLOSE:
+        this.onClose.Fire(this)
         user32.DestroyWindow(this.hwnd)
     case w32.WM_DESTROY:
         user32.PostQuitMessage(0)
