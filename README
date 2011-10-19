@@ -24,7 +24,7 @@ gform.RunMainLoop()
 ==================================================
 gform.Init()
 
-dialog := gform.NewFormFromTemplate(nil, w32.MakeIntResource(101))
+dialog := gform.NewDialogFromResId(nil, 101) //101 is the resource Id.
 dialog.Center()
 dialog.Show()
 
