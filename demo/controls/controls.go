@@ -9,7 +9,7 @@ var (
     lb *gform.Label
 )
 
-func btn_onclick() {
+func btn_onclick(sender gform.Controller) {
     println("Button clicked")
 }
 
@@ -54,6 +54,9 @@ func main() {
     btn.OnMBUp().Attach(btn_onclick)
     btn.OnRBDown().Attach(btn_onclick)
     btn.OnRBUp().Attach(btn_onclick)
+
+    tooltip := gform.NewToolTip(mainWindow)
+    println(tooltip.AddTool(btn, "Hello world"))
 
     gb := gform.NewGroupBox(mainWindow)
     gb.SetCaption("GroupBox1")

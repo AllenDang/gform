@@ -109,6 +109,6 @@ func RegClassOnlyOnce(className string) {
 
     if !isExists {
         RegisterClass(className, GeneralWndprocCallBack)
-        gRegisteredClasses.Push(className)
+        gRegisteredClasses = append(gRegisteredClasses, className)
     }
 }

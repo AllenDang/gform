@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "unsafe"
     "syscall"
     "gform"
     "w32"
@@ -11,14 +12,14 @@ var (
     edt *gform.Edit
 )
 
-func onclick() {
+func onclick(sender gform.Controller) {
     edt.SetCaption("Got you !!!")
 }
 
 func main() {
     gform.Init()
 
-    dialog := gform.NewFormFromTemplate(nil, w32.MakeIntResource(101))
+    dialog := gform.NewDialogFromResId(nil, 101)
     dialog.Center()
     dialog.Show()
 
@@ -31,12 +32,7 @@ func main() {
     lv := gform.AttachListView(dialog, 1002)
 
     for i := 0; i < 10; i++ {
-        var li w32.LVITEM
-        li.Mask = w32.LVIF_TEXT
-        li.IItem = int32(i)
-        li.PszText = syscall.StringToUTF16Ptr(fmt.Sprintf("Here is item #%d", i))
-
-        lv.InsertItem(&li)
+        lv.InsertItem(fmt.Sprintf("Here is item #%d", i), i)
     }
 
     gform.RunMainLoop()

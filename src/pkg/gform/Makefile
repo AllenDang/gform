@@ -28,6 +28,7 @@ GOFILES=\
 	progressbar.go\
 	commondlgs.go\
 	listview.go\
+	tooltip.go\
 	app.go
 	
 include $(GOROOT)/src/Make.pkg

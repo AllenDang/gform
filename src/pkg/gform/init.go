@@ -6,4 +6,5 @@ import (
 
 func init() {
     gControllerRegistry = make(map[w32.HWND]Controller)
+    gRegisteredClasses = make([]string, 0)
 }

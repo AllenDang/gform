@@ -2,7 +2,6 @@ package gform
 
 import (
     "syscall"
-    "container/vector"
     "w32"
 )
 
@@ -10,7 +9,7 @@ import (
 var (
     gAppInstance        w32.HINSTANCE
     gControllerRegistry map[w32.HWND]Controller
-    gRegisteredClasses  vector.StringVector
+    gRegisteredClasses  []string
     gDialogWaiting      *Dialog
 )
 
