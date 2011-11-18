@@ -4,7 +4,7 @@ import (
     "fmt"
     "syscall"
     "unsafe"
-    "utf16"
+    "unicode/utf16"
     "w32"
     "w32/user32"
 )
