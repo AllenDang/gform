@@ -94,7 +94,7 @@ func RegisterClass(className string, wndproc uintptr) {
     wc.IconSm = icon
 
     if ret := user32.RegisterClassEx(&wc); ret == 0 {
-        panic(syscall.Errstr(syscall.GetLastError()))
+        panic(syscall.GetLastError())
     }
 }
 

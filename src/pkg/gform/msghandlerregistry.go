@@ -11,7 +11,7 @@ func RegMsgHandler(controller Controller) {
 }
 
 func UnRegMsgHandler(hwnd w32.HWND) {
-    gControllerRegistry[hwnd] = nil, false
+    delete(gControllerRegistry, hwnd)
 }
 
 func GetMsgHandler(hwnd w32.HWND) Controller {

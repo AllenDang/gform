@@ -19,7 +19,7 @@ func (this *GeneralEventManager) Attach(handler GeneralEventHandler) {
 
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -33,7 +33,7 @@ func (this *GeneralEventManager) Attach(handler GeneralEventHandler) {
 func (this *GeneralEventManager) Detach(handler GeneralEventHandler) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
@@ -67,7 +67,7 @@ func (this *MouseEventManagerA) Attach(handler MouseEventHandlerA) {
     }
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -81,7 +81,7 @@ func (this *MouseEventManagerA) Attach(handler MouseEventHandlerA) {
 func (this *MouseEventManagerA) Detach(handler MouseEventHandlerA) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
@@ -115,7 +115,7 @@ func (this *DropFilesEventManagerA) Attach(handler DropFilesEventHandlerA) {
     }
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -129,7 +129,7 @@ func (this *DropFilesEventManagerA) Attach(handler DropFilesEventHandlerA) {
 func (this *DropFilesEventManagerA) Detach(handler DropFilesEventHandlerA) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
@@ -163,7 +163,7 @@ func (this *PaintEventManagerA) Attach(handler PaintEventHandlerA) {
     }
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -177,7 +177,7 @@ func (this *PaintEventManagerA) Attach(handler PaintEventHandlerA) {
 func (this *PaintEventManagerA) Detach(handler PaintEventHandlerA) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
@@ -211,7 +211,7 @@ func (this *LVEndLabelEditEventManagerA) Attach(handler LVEndLabelEditEventHandl
     }
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -225,7 +225,7 @@ func (this *LVEndLabelEditEventManagerA) Attach(handler LVEndLabelEditEventHandl
 func (this *LVEndLabelEditEventManagerA) Detach(handler LVEndLabelEditEventHandlerA) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
@@ -259,7 +259,7 @@ func (this *LVDBLClickEventManagerA) Attach(handler LVDBLClickEventHandlerA) {
     }
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -273,7 +273,7 @@ func (this *LVDBLClickEventManagerA) Attach(handler LVDBLClickEventHandlerA) {
 func (this *LVDBLClickEventManagerA) Detach(handler LVDBLClickEventHandlerA) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
@@ -307,7 +307,7 @@ func (this *KeyUpEventManagerA) Attach(handler KeyUpEventHandlerA) {
     }
     isExists := false
     for _, v := range this.handlers {
-        if v == handler {
+        if &v == &handler {
             isExists = true
             break
         }
@@ -321,7 +321,7 @@ func (this *KeyUpEventManagerA) Attach(handler KeyUpEventHandlerA) {
 func (this *KeyUpEventManagerA) Detach(handler KeyUpEventHandlerA) {
     if this.handlers != nil {
         for i, v := range this.handlers {
-            if v == handler {
+            if &v == &handler {
                 this.handlers = append(this.handlers[:i], this.handlers[i+1:]...)
                 break
             }
