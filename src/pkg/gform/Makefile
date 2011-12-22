@@ -9,6 +9,8 @@ GOFILES=\
 	imagelist.go\
 	globalvars.go\
 	util.go\
+	pen.go\
+	brush.go\
 	canvas.go\
 	icon.go\
 	msghandlerregistry.go\

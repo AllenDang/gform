@@ -45,3 +45,18 @@ func (this *Canvas) Dispose() {
 func (this *Canvas) DrawIcon(ico *Icon, x, y int) bool {
     return user32.DrawIcon(this.hdc, x, y, ico.Handle())
 }
+
+func (this *Canvas) DrawRect(rect *Rect, pen *Pen) {
+    w32Rect := rect.GetW32Rect()
+
+    previousObj := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(pen.GetHPEN()))
+    if previousObj == 0 {
+        panic("SelectObject failed")
+    }
+    defer gdi32.SelectObject(this.hdc, previousObj)
+    gdi32.Rectangle(this.hdc, w32Rect.Left, w32Rect.Top, w32Rect.Right, w32Rect.Bottom)
+}
+
+func (this *Canvas) FillRect(rect *Rect, brush *Brush) {
+    user32.FillRect(this.hdc, rect.GetW32Rect(), brush.GetHBRUSH())
+}
