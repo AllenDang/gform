@@ -24,6 +24,17 @@ func NewPen(style uint, width uint, brush *Brush) *Pen {
     return &Pen{hPen, style, brush}
 }
 
+func NewNullPen() *Pen {
+    lb := w32.LOGBRUSH{LbStyle: w32.BS_NULL}
+
+    hPen := gdi32.ExtCreatePen(w32.PS_COSMETIC|w32.PS_NULL, 1, &lb, 0, nil)
+    if hPen == 0 {
+        panic("failed to create null brush")
+    }
+
+    return &Pen{hPen: hPen}
+}
+
 func (this *Pen) Style() uint {
     return this.style
 }

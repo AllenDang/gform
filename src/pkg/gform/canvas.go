@@ -46,14 +46,21 @@ func (this *Canvas) DrawIcon(ico *Icon, x, y int) bool {
     return user32.DrawIcon(this.hdc, x, y, ico.Handle())
 }
 
-func (this *Canvas) DrawRect(rect *Rect, pen *Pen) {
+func (this *Canvas) DrawRect(rect *Rect, pen *Pen, brush *Brush) {
     w32Rect := rect.GetW32Rect()
 
-    previousObj := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(pen.GetHPEN()))
-    if previousObj == 0 {
-        panic("SelectObject failed")
+    previousPen := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(pen.GetHPEN()))
+    if previousPen == 0 {
+        panic("SelectObject for pen failed")
     }
-    defer gdi32.SelectObject(this.hdc, previousObj)
+    defer gdi32.SelectObject(this.hdc, previousPen)
+
+    previousBrush := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(brush.GetHBRUSH()))
+    if previousBrush == 0 {
+        panic("SelectObject for brush failed")
+    }
+    defer gdi32.SelectObject(this.hdc, previousBrush)
+
     gdi32.Rectangle(this.hdc, w32Rect.Left, w32Rect.Top, w32Rect.Right, w32Rect.Bottom)
 }
 

@@ -20,6 +20,16 @@ func NewSolidColorBrush(color Color) *Brush {
     return &Brush{hBrush, lb}
 }
 
+func NewNullBrush() *Brush {
+    lb := w32.LOGBRUSH{LbStyle: w32.BS_NULL}
+    hBrush := gdi32.CreateBrushIndirect(&lb)
+    if hBrush == 0 {
+        panic("Failed to create null brush")
+    }
+
+    return &Brush{hBrush, lb}
+}
+
 func (this *Brush) GetHBRUSH() w32.HBRUSH {
     return this.hBrush
 }
