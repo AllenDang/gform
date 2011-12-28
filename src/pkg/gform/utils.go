@@ -7,7 +7,18 @@ import (
     "unicode/utf16"
     "w32"
     "w32/user32"
+    "w32/comctl32"
 )
+
+func internalTrackMouseEvent(hwnd w32.HWND) {
+    var tme w32.TRACKMOUSEEVENT
+    tme.CbSize = uint(unsafe.Sizeof(tme))
+    tme.DwFlags = w32.TME_LEAVE
+    tme.HwndTrack = hwnd
+    tme.DwHoverTime = w32.HOVER_DEFAULT
+
+    comctl32.TrackMouseEvent(&tme)
+}
 
 func UTF16PtrToString(cstr *uint16) string {
     if cstr != nil {

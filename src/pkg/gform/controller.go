@@ -27,6 +27,9 @@ type Controller interface {
     PreTranslateMessage(msg *w32.MSG) bool
     WndProc(msg uint, wparam, lparam uintptr) uintptr
 
+    //General events
+    OnCreate() *GeneralEventManager
+
     // Focus events
     OnKillFocus() *GeneralEventManager
     OnSetFocus() *GeneralEventManager
@@ -48,6 +51,9 @@ type Controller interface {
     OnMBUpA() *MouseEventManagerA
     OnRBDownA() *MouseEventManagerA
     OnRBUpA() *MouseEventManagerA
+
+    OnMouseHover() *GeneralEventManager
+    OnMouseLeave() *GeneralEventManager
 
     //Keyboard events
     OnKeyUpA() *KeyUpEventManagerA

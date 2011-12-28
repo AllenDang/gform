@@ -13,6 +13,9 @@ type ControlBase struct {
 
     isForm bool
 
+    // General events
+    onCreate GeneralEventManager
+
     // Focus events
     onKillFocus GeneralEventManager
     onSetFocus  GeneralEventManager
@@ -34,6 +37,9 @@ type ControlBase struct {
     onMBUpA   MouseEventManagerA
     onRBDownA MouseEventManagerA
     onRBUpA   MouseEventManagerA
+
+    onMouseHover GeneralEventManager
+    onMouseLeave GeneralEventManager
 
     // Keyboard events
     onKeyUpA KeyUpEventManagerA
@@ -164,6 +170,10 @@ func (this *ControlBase) PreTranslateMessage(msg *w32.MSG) bool {
 }
 
 //Events
+func (this *ControlBase) OnCreate() *GeneralEventManager {
+    return &this.onCreate
+}
+
 func (this *ControlBase) OnKillFocus() *GeneralEventManager {
     return &this.onKillFocus
 }
@@ -222,6 +232,14 @@ func (this *ControlBase) OnRBDownA() *MouseEventManagerA {
 
 func (this *ControlBase) OnRBUpA() *MouseEventManagerA {
     return &this.onRBUpA
+}
+
+func (this *ControlBase) OnMouseHover() *GeneralEventManager {
+    return &this.onMouseHover
+}
+
+func (this *ControlBase) OnMouseLeave() *GeneralEventManager {
+    return &this.onMouseLeave
 }
 
 func (this *ControlBase) OnPaintA() *PaintEventManagerA {

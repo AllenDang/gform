@@ -8,7 +8,7 @@ GOFILES=\
 	font.go\
 	imagelist.go\
 	globalvars.go\
-	util.go\
+	utils.go\
 	pen.go\
 	brush.go\
 	canvas.go\
