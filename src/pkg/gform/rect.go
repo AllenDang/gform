@@ -24,7 +24,7 @@ func NewRect(left, top, right, bottom int) *Rect {
     return &newRect
 }
 
-func (this *Rect) Get() (left, top, right, bottom int) {
+func (this *Rect) Data() (left, top, right, bottom int) {
     left = this.rect.Left
     top = this.rect.Top
     right = this.rect.Right

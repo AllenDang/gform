@@ -5,9 +5,7 @@ import (
 )
 
 func RegMsgHandler(controller Controller) {
-    if _, isExists := gControllerRegistry[controller.Handle()]; !isExists {
-        gControllerRegistry[controller.Handle()] = controller
-    }
+    gControllerRegistry[controller.Handle()] = controller
 }
 
 func UnRegMsgHandler(hwnd w32.HWND) {

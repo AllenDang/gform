@@ -9,6 +9,7 @@ import (
 
 type ControlBase struct {
     hwnd   w32.HWND
+    font   *Font
     parent Controller
 
     isForm bool
@@ -112,6 +113,21 @@ func (this *ControlBase) Visible() bool {
     return user32.IsWindowVisible(this.hwnd)
 }
 
+func (this *ControlBase) Bounds() *Rect {
+    rect := user32.GetWindowRect(this.hwnd)
+    if this.isForm {
+        return &Rect{*rect}
+    }
+
+    return ScreenToClientRect(this.hwnd, rect)
+}
+
+
+func (this *ControlBase) ClientRect() *Rect {
+    rect := user32.GetClientRect(this.hwnd)
+    return ScreenToClientRect(this.hwnd, rect)
+}
+
 func (this *ControlBase) Show() {
     user32.ShowWindow(this.hwnd, w32.SW_SHOWDEFAULT)
 }
@@ -134,7 +150,12 @@ func (this *ControlBase) Focus() {
 
 func (this *ControlBase) Invalidate(erase bool) {
     pRect := user32.GetClientRect(this.hwnd)
-    user32.InvalidateRect(this.hwnd, pRect, erase)
+    if this.isForm {
+        user32.InvalidateRect(this.hwnd, pRect, erase)
+    } else {
+        rc := ScreenToClientRect(this.hwnd, pRect)
+        user32.InvalidateRect(this.hwnd, rc.GetW32Rect(), erase)
+    }
 }
 
 func (this *ControlBase) Parent() Controller {
@@ -142,12 +163,12 @@ func (this *ControlBase) Parent() Controller {
 }
 
 func (this *ControlBase) Font() *Font {
-    //TODO: Implement Font()
-    return nil
+    return this.font
 }
 
 func (this *ControlBase) SetFont(font *Font) {
     user32.SendMessage(this.hwnd, w32.WM_SETFONT, uintptr(font.hfont), 1)
+    this.font = font
 }
 
 func (this *ControlBase) SetDragAcceptFilesEnabled(b bool) {

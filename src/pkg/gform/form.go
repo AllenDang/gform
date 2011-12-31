@@ -10,6 +10,7 @@ type Form struct {
     ControlBase
 
     isDialog bool
+    isDragMove bool
 
     onClose GeneralEventManager
 }
@@ -29,6 +30,7 @@ func (this *Form) init(parent Controller) {
 
     this.isForm = true
     this.isDialog = false
+    this.isDragMove = false
     this.hwnd = CreateWindow("gform_Form", parent, w32.WS_EX_CLIENTEDGE, w32.WS_OVERLAPPEDWINDOW)
     this.ControlBase.init(parent)
 
@@ -72,8 +74,17 @@ func (this *Form) SetSizable(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_THICKFRAME)
 }
 
+func (this *Form) SetDragMove(b bool) {
+    this.isDragMove = b
+}
+
 func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
+    case w32.WM_LBUTTONDOWN:
+        if this.isDragMove {
+            user32.ReleaseCapture()
+            user32.SendMessage(this.hwnd, w32.WM_NCLBUTTONDOWN, w32.HTCAPTION, 0)
+        }
     case w32.WM_NOTIFY: //Reflect
         nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
         if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {

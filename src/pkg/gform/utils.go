@@ -123,3 +123,11 @@ func RegClassOnlyOnce(className string) {
         gRegisteredClasses = append(gRegisteredClasses, className)
     }
 }
+
+func ScreenToClientRect(hwnd w32.HWND, rect *w32.RECT) *Rect {
+    l, t, r, b := rect.Left, rect.Top, rect.Right, rect.Bottom
+
+    l, t = user32.ScreenToClient(hwnd, l, t)
+    r, b = user32.ScreenToClient(hwnd, r, b)
+    return NewRect(l, t, r, b)
+}

@@ -82,6 +82,10 @@ func (this *Font) createForDPI(dpi int) w32.HFONT {
     return gdi32.CreateFontIndirect(&lf)
 }
 
+func (this *Font) GetHFONT() w32.HFONT {
+    return this.hfont
+}
+
 func (this *Font) Bold() bool {
     return this.style&FontBold > 0
 }

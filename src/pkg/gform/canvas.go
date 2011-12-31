@@ -50,15 +50,9 @@ func (this *Canvas) DrawRect(rect *Rect, pen *Pen, brush *Brush) {
     w32Rect := rect.GetW32Rect()
 
     previousPen := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(pen.GetHPEN()))
-    if previousPen == 0 {
-        panic("SelectObject for pen failed")
-    }
     defer gdi32.SelectObject(this.hdc, previousPen)
 
     previousBrush := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(brush.GetHBRUSH()))
-    if previousBrush == 0 {
-        panic("SelectObject for brush failed")
-    }
     defer gdi32.SelectObject(this.hdc, previousBrush)
 
     gdi32.Rectangle(this.hdc, w32Rect.Left, w32Rect.Top, w32Rect.Right, w32Rect.Bottom)
@@ -66,4 +60,18 @@ func (this *Canvas) DrawRect(rect *Rect, pen *Pen, brush *Brush) {
 
 func (this *Canvas) FillRect(rect *Rect, brush *Brush) {
     user32.FillRect(this.hdc, rect.GetW32Rect(), brush.GetHBRUSH())
+}
+
+// Refer uFormat parameter for win32 DrawText.
+func (this *Canvas) DrawText(text string, rect *Rect, format uint, font *Font, textColor Color) {
+    previousFont := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(font.GetHFONT()))
+    defer gdi32.SelectObject(this.hdc, w32.HGDIOBJ(previousFont))
+
+    previousBkMode := gdi32.SetBkMode(this.hdc, w32.TRANSPARENT)
+    defer gdi32.SetBkMode(this.hdc, previousBkMode)
+
+    previousTextColor := gdi32.SetTextColor(this.hdc, w32.COLORREF(textColor))
+    defer gdi32.SetTextColor(this.hdc, previousTextColor)
+
+    user32.DrawText(this.hdc, text, len(text), rect.GetW32Rect(), format)
 }

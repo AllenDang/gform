@@ -14,6 +14,8 @@ type Controller interface {
     Pos() (x, y int)
     Size() (w, h int)
     Visible() bool
+    Bounds() *Rect
+    ClientRect() *Rect
     SetCaption(s string)
     SetEnabled(b bool)
     SetPos(x, y int)
