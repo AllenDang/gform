@@ -1,32 +1,20 @@
 package gform
 
-import (
-	"w32"
-)
-
-type MouseEventArg struct {
-    X, Y int
-    Button int
-    Wheel int
+type EventArg struct {
+	sender Controller
+	data interface{}
 }
 
-type DropFilesEventArg struct {
-	X, Y int
-	Files []string
+func NewEventArg(sender Controller, data interface{}) *EventArg {
+	ea := new(EventArg)
+	ea.sender, ea.data = sender, data
+	return ea
 }
 
-type PaintEventArg struct {
-	Canvas *Canvas
+func (this *EventArg) Sender() Controller {
+	return this.sender
 }
 
-type LVEndLabelEditEventArg struct {
-	Item *w32.LVITEM
-}
-
-type LVDBLClickEventArg struct {
-	NmItem *w32.NMITEMACTIVATE
-}
-
-type KeyUpEventArg struct {
-	VKey, Code int
+func (this *EventArg) Data() interface{} {
+	return this.data
 }

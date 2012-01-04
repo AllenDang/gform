@@ -8,7 +8,7 @@ import (
 type Edit struct {
     W32Control
 
-    onChange GeneralEventManager
+    onChange EventManager
 }
 
 func NewEdit(parent Controller) *Edit {
@@ -35,7 +35,7 @@ func (this *Edit) init(parent Controller) {
 }
 
 //Events
-func (this *Edit) OnChange() *GeneralEventManager {
+func (this *Edit) OnChange() *EventManager {
     return &this.onChange
 }
 
@@ -49,7 +49,7 @@ func (this *Edit) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     case w32.WM_COMMAND:
         switch w32.HIWORD(uint(wparam)) {
             case w32.EN_CHANGE:
-                this.onChange.Fire(this)
+                this.onChange.Fire(NewEventArg(this, nil))
         }
     }
 

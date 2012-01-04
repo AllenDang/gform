@@ -14,8 +14,8 @@ type Dialog struct {
     
     Data interface{}
 
-    onLoad         GeneralEventManager
-    onOK, onCancel GeneralEventManager
+    onLoad         EventManager
+    onOK, onCancel EventManager
 }
 
 func NewDialogFromResId(parent Controller, resId uint) *Dialog {
@@ -36,28 +36,28 @@ func NewDialogFromResId(parent Controller, resId uint) *Dialog {
 }
 
 // internal event handlers
-func dlg_OnOK(sender Controller) {
-    if d, ok := sender.(*Dialog); ok {
+func dlg_OnOK(arg *EventArg) {
+    if d, ok := arg.Sender().(*Dialog); ok {
         d.Close(w32.IDOK)
     }
 }
 
-func dlg_OnCancel(sender Controller) {
-    if d, ok := sender.(*Dialog); ok {
+func dlg_OnCancel(arg *EventArg) {
+    if d, ok := arg.Sender().(*Dialog); ok {
         d.Close(w32.IDCANCEL)
     }
 }
 
 // Events
-func (this *Dialog) OnLoad() *GeneralEventManager {
+func (this *Dialog) OnLoad() *EventManager {
     return &this.onLoad
 }
 
-func (this *Dialog) OnOK() *GeneralEventManager {
+func (this *Dialog) OnOK() *EventManager {
     return &this.onOK
 }
 
-func (this *Dialog) OnCancel() *GeneralEventManager {
+func (this *Dialog) OnCancel() *EventManager {
     return &this.onCancel
 }
 
@@ -103,7 +103,7 @@ func (this *Dialog) ShowModalWithData(data interface{}) (result int) {
 }
 
 func (this *Dialog) Close(result int) {
-    this.onClose.Fire(this)
+    this.onClose.Fire(NewEventArg(this, nil))
     
     if this.isModal {
         user32.EndDialog(this.hwnd, uintptr(result))
@@ -128,7 +128,7 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_INITDIALOG:
         gDialogWaiting = nil
-        this.onLoad.Fire(this)
+        this.onLoad.Fire(NewEventArg(this, nil))
     case w32.WM_NOTIFY:
         nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
         if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
@@ -151,10 +151,10 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         }
         switch w32.LOWORD(uint(wparam)) {
         case w32.IDOK:
-            this.onOK.Fire(this)
+            this.onOK.Fire(NewEventArg(this, nil))
             return w32.TRUE
         case w32.IDCANCEL:
-            this.onCancel.Fire(this)
+            this.onCancel.Fire(NewEventArg(this, nil))
             return w32.TRUE
         }
     case w32.WM_DESTROY:

@@ -30,36 +30,29 @@ type Controller interface {
     WndProc(msg uint, wparam, lparam uintptr) uintptr
 
     //General events
-    OnCreate() *GeneralEventManager
+    OnCreate() *EventManager
 
     // Focus events
-    OnKillFocus() *GeneralEventManager
-    OnSetFocus() *GeneralEventManager
+    OnKillFocus() *EventManager
+    OnSetFocus() *EventManager
 
     //Drag and drop events
-    OnDropFilesA() *DropFilesEventManagerA
+    OnDropFiles() *EventManager
 
     //Mouse events
-    OnLBDown() *GeneralEventManager
-    OnLBUp() *GeneralEventManager
-    OnMBDown() *GeneralEventManager
-    OnMBUp() *GeneralEventManager
-    OnRBDown() *GeneralEventManager
-    OnRBUp() *GeneralEventManager
+    OnLBDown() *EventManager
+    OnLBUp() *EventManager
+    OnMBDown() *EventManager
+    OnMBUp() *EventManager
+    OnRBDown() *EventManager
+    OnRBUp() *EventManager
 
-    OnLBDownA() *MouseEventManagerA
-    OnLBUpA() *MouseEventManagerA
-    OnMBDownA() *MouseEventManagerA
-    OnMBUpA() *MouseEventManagerA
-    OnRBDownA() *MouseEventManagerA
-    OnRBUpA() *MouseEventManagerA
-
-    OnMouseHover() *GeneralEventManager
-    OnMouseLeave() *GeneralEventManager
+    OnMouseHover() *EventManager
+    OnMouseLeave() *EventManager
 
     //Keyboard events
-    OnKeyUpA() *KeyUpEventManagerA
+    OnKeyUp() *EventManager
 
     //Paint events
-    OnPaintA() *PaintEventManagerA
+    OnPaint() *EventManager
 }

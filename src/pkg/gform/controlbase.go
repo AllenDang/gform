@@ -15,38 +15,31 @@ type ControlBase struct {
     isForm bool
 
     // General events
-    onCreate GeneralEventManager
+    onCreate EventManager
 
     // Focus events
-    onKillFocus GeneralEventManager
-    onSetFocus  GeneralEventManager
+    onKillFocus EventManager
+    onSetFocus  EventManager
 
     // Drag and drop events
-    onDropFilesA DropFilesEventManagerA
+    onDropFiles EventManager
 
     // Mouse events
-    onLBDown GeneralEventManager
-    onLBUp   GeneralEventManager
-    onMBDown GeneralEventManager
-    onMBUp   GeneralEventManager
-    onRBDown GeneralEventManager
-    onRBUp   GeneralEventManager
+    onLBDown EventManager
+    onLBUp   EventManager
+    onMBDown EventManager
+    onMBUp   EventManager
+    onRBDown EventManager
+    onRBUp   EventManager
 
-    onLBDownA MouseEventManagerA
-    onLBUpA   MouseEventManagerA
-    onMBDownA MouseEventManagerA
-    onMBUpA   MouseEventManagerA
-    onRBDownA MouseEventManagerA
-    onRBUpA   MouseEventManagerA
-
-    onMouseHover GeneralEventManager
-    onMouseLeave GeneralEventManager
+    onMouseHover EventManager
+    onMouseLeave EventManager
 
     // Keyboard events
-    onKeyUpA KeyUpEventManagerA
+    onKeyUp EventManager
 
     // Paint events
-    onPaintA PaintEventManagerA
+    onPaint EventManager
 }
 
 func (this *ControlBase) init(parent Controller) {
@@ -191,82 +184,58 @@ func (this *ControlBase) PreTranslateMessage(msg *w32.MSG) bool {
 }
 
 //Events
-func (this *ControlBase) OnCreate() *GeneralEventManager {
+func (this *ControlBase) OnCreate() *EventManager {
     return &this.onCreate
 }
 
-func (this *ControlBase) OnKillFocus() *GeneralEventManager {
+func (this *ControlBase) OnKillFocus() *EventManager {
     return &this.onKillFocus
 }
 
-func (this *ControlBase) OnSetFocus() *GeneralEventManager {
+func (this *ControlBase) OnSetFocus() *EventManager {
     return &this.onSetFocus
 }
 
-func (this *ControlBase) OnDropFilesA() *DropFilesEventManagerA {
-    return &this.onDropFilesA
+func (this *ControlBase) OnDropFiles() *EventManager {
+    return &this.onDropFiles
 }
 
-func (this *ControlBase) OnLBDown() *GeneralEventManager {
+func (this *ControlBase) OnLBDown() *EventManager {
     return &this.onLBDown
 }
 
-func (this *ControlBase) OnLBUp() *GeneralEventManager {
+func (this *ControlBase) OnLBUp() *EventManager {
     return &this.onLBUp
 }
 
-func (this *ControlBase) OnMBDown() *GeneralEventManager {
+func (this *ControlBase) OnMBDown() *EventManager {
     return &this.onMBDown
 }
 
-func (this *ControlBase) OnMBUp() *GeneralEventManager {
+func (this *ControlBase) OnMBUp() *EventManager {
     return &this.onMBUp
 }
 
-func (this *ControlBase) OnRBDown() *GeneralEventManager {
+func (this *ControlBase) OnRBDown() *EventManager {
     return &this.onRBDown
 }
 
-func (this *ControlBase) OnRBUp() *GeneralEventManager {
+func (this *ControlBase) OnRBUp() *EventManager {
     return &this.onRBUp
 }
 
-func (this *ControlBase) OnLBDownA() *MouseEventManagerA {
-    return &this.onLBDownA
-}
-
-func (this *ControlBase) OnLBUpA() *MouseEventManagerA {
-    return &this.onLBUpA
-}
-
-func (this *ControlBase) OnMBDownA() *MouseEventManagerA {
-    return &this.onMBDownA
-}
-
-func (this *ControlBase) OnMBUpA() *MouseEventManagerA {
-    return &this.onMBUpA
-}
-
-func (this *ControlBase) OnRBDownA() *MouseEventManagerA {
-    return &this.onRBDownA
-}
-
-func (this *ControlBase) OnRBUpA() *MouseEventManagerA {
-    return &this.onRBUpA
-}
-
-func (this *ControlBase) OnMouseHover() *GeneralEventManager {
+func (this *ControlBase) OnMouseHover() *EventManager {
     return &this.onMouseHover
 }
 
-func (this *ControlBase) OnMouseLeave() *GeneralEventManager {
+func (this *ControlBase) OnMouseLeave() *EventManager {
     return &this.onMouseLeave
 }
 
-func (this *ControlBase) OnPaintA() *PaintEventManagerA {
-    return &this.onPaintA
+func (this *ControlBase) OnPaint() *EventManager {
+    return &this.onPaint
 }
 
-func (this *ControlBase) OnKeyUpA() *KeyUpEventManagerA {
-    return &this.onKeyUpA
+func (this *ControlBase) OnKeyUp() *EventManager {
+    return &this.onKeyUp
 }

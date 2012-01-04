@@ -6,32 +6,32 @@ import (
     "w32/shell32"
 )
 
-func genMouseEventArg(wparam, lparam uintptr) *MouseEventArg {
-    var arg MouseEventArg
-    arg.Button = int(wparam)
-    arg.X = int(w32.LOWORD(uint(lparam)))
-    arg.Y = int(w32.HIWORD(uint(lparam)))
+func genMouseEventArg(wparam, lparam uintptr) *MouseEventData {
+    var data MouseEventData
+    data.Button = int(wparam)
+    data.X = int(w32.LOWORD(uint(lparam)))
+    data.Y = int(w32.HIWORD(uint(lparam)))
 
-    return &arg
+    return &data
 }
 
-func genDropFilesEventArg(wparam uintptr) *DropFilesEventArg {
+func genDropFilesEventArg(wparam uintptr) *DropFilesEventData {
     hDrop := w32.HDROP(wparam)
 
-    var arg DropFilesEventArg
+    var data DropFilesEventData
     _, fileCount := shell32.DragQueryFile(hDrop, 0xFFFFFFFF)
-    arg.Files = make([]string, fileCount)
+    data.Files = make([]string, fileCount)
 
     var i uint
     for i = 0; i < fileCount; i++ {
-        arg.Files[i], _ = shell32.DragQueryFile(hDrop, i)
+        data.Files[i], _ = shell32.DragQueryFile(hDrop, i)
     }
 
-    arg.X, arg.Y, _ = shell32.DragQueryPoint(hDrop)
+    data.X, data.Y, _ = shell32.DragQueryPoint(hDrop)
 
     shell32.DragFinish(hDrop)
 
-    return &arg
+    return &data
 }
 
 func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
@@ -45,35 +45,29 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
         if controller, ok := msgHandler.(Controller); ok {
             switch msg {
             case w32.WM_KILLFOCUS:
-                controller.OnKillFocus().Fire(controller)
+                controller.OnKillFocus().Fire(NewEventArg(controller, nil))
             case w32.WM_SETFOCUS:
-                controller.OnSetFocus().Fire(controller)
+                controller.OnSetFocus().Fire(NewEventArg(controller, nil))
             case w32.WM_DROPFILES:
-                controller.OnDropFilesA().Fire(controller, genDropFilesEventArg(wparam))
+                controller.OnDropFiles().Fire(NewEventArg(controller, genDropFilesEventArg(wparam)))
             case w32.WM_LBUTTONDOWN:
-                controller.OnLBDownA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnLBDown().Fire(controller)
+                controller.OnLBDown().Fire(NewEventArg(controller, genMouseEventArg(wparam, lparam)))
             case w32.WM_LBUTTONUP:
-                controller.OnLBUpA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnLBUp().Fire(controller)
+                controller.OnLBUp().Fire(NewEventArg(controller, genMouseEventArg(wparam, lparam)))
             case w32.WM_MBUTTONDOWN:
-                controller.OnMBDownA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnMBDown().Fire(controller)
+                controller.OnMBDown().Fire(NewEventArg(controller, genMouseEventArg(wparam, lparam)))
             case w32.WM_MBUTTONUP:
-                controller.OnMBUpA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnMBUp().Fire(controller)
+                controller.OnMBUp().Fire(NewEventArg(controller, genMouseEventArg(wparam, lparam)))
             case w32.WM_RBUTTONDOWN:
-                controller.OnRBDownA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnRBDown().Fire(controller)
+                controller.OnRBDown().Fire(NewEventArg(controller, genMouseEventArg(wparam, lparam)))
             case w32.WM_RBUTTONUP:
-                controller.OnRBUpA().Fire(controller, genMouseEventArg(wparam, lparam))
-                controller.OnRBUp().Fire(controller)
+                controller.OnRBUp().Fire(NewEventArg(controller, genMouseEventArg(wparam, lparam)))
             case w32.WM_PAINT:
                 canvas := NewCanvasFromHwnd(hwnd)
-                controller.OnPaintA().Fire(controller, &PaintEventArg{Canvas: canvas})
+                controller.OnPaint().Fire(NewEventArg(controller, &PaintEventData{Canvas: canvas}))
                 canvas.Dispose()
             case w32.WM_KEYUP:
-                controller.OnKeyUpA().Fire(controller, &KeyUpEventArg{int(wparam), int(lparam)})
+                controller.OnKeyUp().Fire(NewEventArg(controller, &KeyUpEventData{int(wparam), int(lparam)}))
             }
         }
         return ret

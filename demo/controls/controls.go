@@ -9,33 +9,33 @@ var (
     lb *gform.Label
 )
 
-func btn_onclick(sender gform.Controller) {
+func btn_onclick(arg *gform.EventArg) {
     println("Button clicked")
 }
 
-func btnOpenFile_onclick(sender gform.Controller, arg *gform.MouseEventArg) {
-    file, accepted := gform.ShowOpenFileDlg(sender.Parent(), "Test open file dialog", "", 0, "")
+func btnOpenFile_onclick(arg *gform.EventArg) {
+    file, accepted := gform.ShowOpenFileDlg(arg.Sender().Parent(), "Test open file dialog", "", 0, "")
     if accepted {
         lb.SetCaption(file)
     }
 }
 
-func btnBrowseFolder_onclick(sender gform.Controller, arg *gform.MouseEventArg) {
-    folder, accepted := gform.ShowBrowseFolderDlg(sender.Parent(), "Test browse folder")
+func btnBrowseFolder_onclick(arg *gform.EventArg) {
+    folder, accepted := gform.ShowBrowseFolderDlg(arg.Sender().Parent(), "Test browse folder")
     if accepted {
         lb.SetCaption(folder)
     }
 }
 
-func btnSaveFile_onclick(sender gform.Controller, arg *gform.MouseEventArg) {
-    file, accepted := gform.ShowSaveFileDlg(sender.Parent(), "Test save file dialog", "", 0, "")
+func btnSaveFile_onclick(arg *gform.EventArg) {
+    file, accepted := gform.ShowSaveFileDlg(arg.Sender().Parent(), "Test save file dialog", "", 0, "")
     if accepted {
         lb.SetCaption(file)
     }
 }
 
-func btnMsgBox_onclick(sender gform.Controller, arg *gform.MouseEventArg) {
-    gform.MsgBox(sender.Parent(), "Message", "Test messagebox from gform", w32.MB_OK|w32.MB_ICONINFORMATION)
+func btnMsgBox_onclick(arg *gform.EventArg) {
+    gform.MsgBox(arg.Sender().Parent(), "Message", "Test messagebox from gform", w32.MB_OK|w32.MB_ICONINFORMATION)
 }
 
 func main() {
@@ -80,22 +80,22 @@ func main() {
     btnBrowseFolder := gform.NewPushButton(gb1)
     btnBrowseFolder.SetPos(10, 20)
     btnBrowseFolder.SetCaption("Browse Folder Dlg")
-    btnBrowseFolder.OnLBUpA().Attach(btnBrowseFolder_onclick)
+    btnBrowseFolder.OnLBUp().Attach(btnBrowseFolder_onclick)
 
     btnOpenFile := gform.NewPushButton(gb1)
     btnOpenFile.SetPos(10, 50)
     btnOpenFile.SetCaption("Open File Dlg")
-    btnOpenFile.OnLBUpA().Attach(btnOpenFile_onclick)
+    btnOpenFile.OnLBUp().Attach(btnOpenFile_onclick)
 
     btnSaveFile := gform.NewPushButton(gb1)
     btnSaveFile.SetPos(10, 80)
     btnSaveFile.SetCaption("Save File Dlg")
-    btnSaveFile.OnLBUpA().Attach(btnSaveFile_onclick)
+    btnSaveFile.OnLBUp().Attach(btnSaveFile_onclick)
 
     btnMsgBox := gform.NewPushButton(gb1)
     btnMsgBox.SetPos(10, 110)
     btnMsgBox.SetCaption("Msgbox")
-    btnMsgBox.OnLBUpA().Attach(btnMsgBox_onclick)
+    btnMsgBox.OnLBUp().Attach(btnMsgBox_onclick)
 
     lb = gform.NewLabel(mainWindow)
     lb.SetPos(130, 10)

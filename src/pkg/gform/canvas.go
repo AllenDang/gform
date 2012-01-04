@@ -62,7 +62,7 @@ func (this *Canvas) FillRect(rect *Rect, brush *Brush) {
     user32.FillRect(this.hdc, rect.GetW32Rect(), brush.GetHBRUSH())
 }
 
-// Refer uFormat parameter for win32 DrawText.
+// Refer win32 DrawText document for uFormat.
 func (this *Canvas) DrawText(text string, rect *Rect, format uint, font *Font, textColor Color) {
     previousFont := gdi32.SelectObject(this.hdc, w32.HGDIOBJ(font.GetHFONT()))
     defer gdi32.SelectObject(this.hdc, w32.HGDIOBJ(previousFont))

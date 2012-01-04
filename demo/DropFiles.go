@@ -4,12 +4,14 @@ import (
 	"gform"
 )
 
-func mainWindow_OnDropFilesA(sender gform.Controller, arg *gform.DropFilesEventArg) {
-	println("File Count:", len(arg.Files))
-	println("Pos", arg.X, arg.Y)
-	for _, f := range arg.Files {
-		println(f)
-	}
+func mainWindow_OnDropFiles(arg *gform.EventArg) {
+    if e, ok := arg.Data().(*gform.DropFilesEventData); ok {
+    	println("File Count:", len(e.Files))
+    	println("Pos", e.X, e.Y)
+    	for _, f := range e.Files {
+    		println(f)
+    	}
+    }
 }
 
 
@@ -25,7 +27,7 @@ func main() {
     mainWindow.SetCaption("Drop Files Demo")
     mainWindow.SetDragAcceptFilesEnabled(true)
 
-    mainWindow.OnDropFilesA().Attach(mainWindow_OnDropFilesA)
+    mainWindow.OnDropFiles().Attach(mainWindow_OnDropFiles)
 
     mainWindow.Show()
 

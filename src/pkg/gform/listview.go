@@ -10,9 +10,9 @@ import (
 type ListView struct {
     W32Control
 
-    onEndLabelEdit LVEndLabelEditEventManagerA
-    onDBLClick     LVDBLClickEventManagerA
-    onClick        LVDBLClickEventManagerA
+    onEndLabelEdit EventManager
+    onDBLClick     EventManager
+    onClick        EventManager
 }
 
 func NewListView(parent Controller) *ListView {
@@ -181,15 +181,15 @@ func (this *ListView) GetImageList(imageListType int) *ImageList {
 }
 
 // Event publishers
-func (this *ListView) OnEndLabelEdit() *LVEndLabelEditEventManagerA {
+func (this *ListView) OnEndLabelEdit() *EventManager {
     return &this.onEndLabelEdit
 }
 
-func (this *ListView) OnDBLClick() *LVDBLClickEventManagerA {
+func (this *ListView) OnDBLClick() *EventManager {
     return &this.onDBLClick
 }
 
-func (this *ListView) OnClick() *LVDBLClickEventManagerA {
+func (this *ListView) OnClick() *EventManager {
     return &this.onClick
 }
 
@@ -204,15 +204,15 @@ func (this *ListView) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         case w32.LVN_ENDLABELEDITW:
             nmdi := (*w32.NMLVDISPINFO)(unsafe.Pointer(lparam))
             if nmdi.Item.PszText != nil {
-                this.onEndLabelEdit.Fire(this, &LVEndLabelEditEventArg{Item: &nmdi.Item})
+                this.onEndLabelEdit.Fire(NewEventArg(this, &LVEndLabelEditEventData{Item: &nmdi.Item}))
                 return w32.TRUE
             }
         case w32.NM_DBLCLK:
             nmItem := (*w32.NMITEMACTIVATE)(unsafe.Pointer(lparam))
-            this.onDBLClick.Fire(this, &LVDBLClickEventArg{NmItem: nmItem})
+            this.onDBLClick.Fire(NewEventArg(this, &LVDBLClickEventData{NmItem: nmItem}))
         case w32.NM_CLICK:
             nmItem := (*w32.NMITEMACTIVATE)(unsafe.Pointer(lparam))
-            this.onClick.Fire(this, &LVDBLClickEventArg{NmItem: nmItem})
+            this.onClick.Fire(NewEventArg(this, &LVDBLClickEventData{NmItem: nmItem}))
         }
     }
 

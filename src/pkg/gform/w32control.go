@@ -40,15 +40,15 @@ func (this *W32Control) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_CREATE:
         internalTrackMouseEvent(this.hwnd)
-        this.onCreate.Fire(this)
+        this.onCreate.Fire(NewEventArg(this, nil))
     case w32.WM_MOUSEMOVE:
         if this.isMouseLeft {
-            this.onMouseHover.Fire(this)
+            this.onMouseHover.Fire(NewEventArg(this, nil))
             internalTrackMouseEvent(this.hwnd)
             this.isMouseLeft = false
         }
     case w32.WM_MOUSELEAVE:
-        this.onMouseLeave.Fire(this)
+        this.onMouseLeave.Fire(NewEventArg(this, nil))
         this.isMouseLeft = true
     }
     return user32.CallWindowProc(this.originalWndProc, this.hwnd, msg, wparam, lparam)

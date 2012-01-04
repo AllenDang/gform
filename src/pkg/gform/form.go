@@ -12,7 +12,7 @@ type Form struct {
     isDialog bool
     isDragMove bool
 
-    onClose GeneralEventManager
+    onClose EventManager
 }
 
 func NewForm(parent Controller) *Form {
@@ -38,7 +38,7 @@ func (this *Form) init(parent Controller) {
 }
 
 // Events
-func (this *Form) OnClose() *GeneralEventManager {
+func (this *Form) OnClose() *EventManager {
     return &this.onClose
 }
 
@@ -98,7 +98,7 @@ func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             }
         }
     case w32.WM_CLOSE:
-        this.onClose.Fire(this)
+        this.onClose.Fire(NewEventArg(this, nil))
         user32.DestroyWindow(this.hwnd)
     case w32.WM_DESTROY:
         user32.PostQuitMessage(0)

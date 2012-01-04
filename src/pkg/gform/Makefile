@@ -15,8 +15,8 @@ GOFILES=\
 	icon.go\
 	msghandlerregistry.go\
 	controller.go\
-	eventhandler.go\
 	eventarg.go\
+	eventdata.go\
 	eventmanager.go\
 	controlbase.go\
 	wndproc.go\

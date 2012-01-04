@@ -10,7 +10,7 @@ var (
     btn *gform.PushButton
 )
 
-func onclick(sender gform.Controller, arg *gform.MouseEventArg) {
+func onclick(arg *gform.EventArg) {
     go setProgress()
 }
 
@@ -35,7 +35,7 @@ func main() {
     btn = gform.NewPushButton(mw)
     btn.SetPos(10, 10)
     btn.SetCaption("Click me")
-    btn.OnLButtonUp().Attach(onclick)
+    btn.OnLBUp().Attach(onclick)
 
     pb = gform.NewProgressBar(mw)
     pb.SetPos(10, 40)

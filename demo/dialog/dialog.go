@@ -2,17 +2,14 @@ package main
 
 import (
     "fmt"
-    "unsafe"
-    "syscall"
     "gform"
-    "w32"
 )
 
 var (
     edt *gform.Edit
 )
 
-func onclick(sender gform.Controller) {
+func onclick(arg *gform.EventArg) {
     edt.SetCaption("Got you !!!")
 }
 
