@@ -42,6 +42,31 @@ func (this *Canvas) Dispose() {
     }
 }
 
+func (this *Canvas) DrawBitmap(bmp *Bitmap, x, y int) {
+    cdc := gdi32.CreateCompatibleDC(0)
+    defer gdi32.DeleteDC(cdc)
+
+    hbmpOld := gdi32.SelectObject(cdc, w32.HGDIOBJ(bmp.GetHBITMAP()))
+    defer gdi32.SelectObject(cdc, w32.HGDIOBJ(hbmpOld))
+
+    w, h := bmp.Size()
+
+    gdi32.BitBlt(this.hdc, x, y, w, h, cdc, 0, 0, w32.SRCCOPY)
+}
+
+func (this *Canvas) DrawStretchedBitmap(bmp *Bitmap, rect *Rect) {
+    cdc := gdi32.CreateCompatibleDC(0)
+    defer gdi32.DeleteDC(cdc)
+
+    hbmpOld := gdi32.SelectObject(cdc, w32.HGDIOBJ(bmp.GetHBITMAP()))
+    defer gdi32.SelectObject(cdc, w32.HGDIOBJ(hbmpOld))
+
+    w, h := bmp.Size()
+
+    rc := rect.GetW32Rect()
+    gdi32.StretchBlt(this.hdc, rc.Left, rc.Top, rc.Right, rc.Bottom, cdc, 0, 0, w, h, w32.SRCCOPY)
+}
+
 func (this *Canvas) DrawIcon(ico *Icon, x, y int) bool {
     return user32.DrawIcon(this.hdc, x, y, ico.Handle())
 }

@@ -13,6 +13,7 @@ GOFILES=\
 	brush.go\
 	canvas.go\
 	icon.go\
+	bitmap.go\
 	msghandlerregistry.go\
 	controller.go\
 	eventarg.go\

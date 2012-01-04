@@ -6,6 +6,7 @@ import (
     "w32/kernel32"
     "w32/user32"
     "w32/comctl32"
+    "w32/gdiplus"
 )
 
 func Init() {
@@ -62,6 +63,8 @@ func RunMainLoop() int {
             user32.DispatchMessage(&m)
         }
     }
+
+    gdiplus.GdiplusShutdown()
 
     return int(m.WParam)
 }
