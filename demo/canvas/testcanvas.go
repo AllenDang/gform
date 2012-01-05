@@ -10,7 +10,7 @@ const IDR_PNG1 = 100
 
 func onpaint(arg *gform.EventArg) {
 	if data, ok := arg.Data().(*gform.PaintEventData); ok {
-		if bmp, err := gform.NewBitmapFromResId(
+		if bmp, err := gform.NewBitmapFromResource(
 			gform.GetAppInstance(), 
 			w32.MakeIntResource(IDR_PNG1), 
 			syscall.StringToUTF16Ptr("PNG"), 

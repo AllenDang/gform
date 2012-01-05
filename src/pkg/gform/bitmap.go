@@ -52,12 +52,12 @@ func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uin
 	var err error
 	var hRes w32.HRSRC
 	
-	hRes, err = kernel32.FindResource(0, resName, resType)
+	hRes, err = kernel32.FindResource(w32.HMODULE(instance), resName, resType)
 	if err != nil {
 		return nil, err
 	}
-	resSize := kernel32.SizeofResource(0, hRes)
-	pResData := kernel32.LockResource(kernel32.LoadResource(0, hRes))
+	resSize := kernel32.SizeofResource(w32.HMODULE(instance), hRes)
+	pResData := kernel32.LockResource(kernel32.LoadResource(w32.HMODULE(instance), hRes))
 	resBuffer := kernel32.GlobalAlloc(w32.GMEM_MOVEABLE, resSize)
 	pResBuffer := kernel32.GlobalLock(resBuffer)
 	defer kernel32.GlobalUnlock(resBuffer)
