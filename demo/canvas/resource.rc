@@ -11,4 +11,4 @@
 
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-CLOSE              200            ".\\close.png"
+IDR_PNG1           PNG            ".\\close.png"

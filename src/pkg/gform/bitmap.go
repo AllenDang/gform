@@ -4,6 +4,8 @@ import (
 	"errors"
 	"unsafe"
 	"w32"
+	"w32/kernel32"
+	"w32/ole32"
 	"w32/gdi32"
 	"w32/gdiplus"
 )
@@ -45,15 +47,30 @@ func NewBitmapFromFile(filepath string, background Color) (*Bitmap, error) {
 	return assembleBitmapFromHBITMAP(hbitmap)
 }
 
-func NewBitmapFromResId(instance w32.HINSTANCE, resId *uint16, background Color) (*Bitmap, error) {
+func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uint16, background Color) (*Bitmap, error) {
 	var gpBitmap *uintptr
 	var err error
+	var hRes w32.HRSRC
 	
-	gpBitmap, err = gdiplus.GdipCreateBitmapFromResource(instance, resId)
+	hRes, err = kernel32.FindResource(0, resName, resType)
 	if err != nil {
 		return nil, err
 	}
-	defer gdiplus.GdipDisposeImage(gpBitmap)
+	resSize := kernel32.SizeofResource(0, hRes)
+	pResData := kernel32.LockResource(kernel32.LoadResource(0, hRes))
+	resBuffer := kernel32.GlobalAlloc(w32.GMEM_MOVEABLE, resSize)
+	pResBuffer := kernel32.GlobalLock(resBuffer)
+	defer kernel32.GlobalUnlock(resBuffer)
+	defer kernel32.GlobalFree(resBuffer)
+
+	kernel32.MoveMemory(pResBuffer, pResData, resSize)
+
+	stream := ole32.CreateStreamOnHGlobal(resBuffer, false)
+	defer stream.Release()
+	gpBitmap, err = gdiplus.GdipCreateBitmapFromStream(stream)
+	if err != nil {
+		return nil, err
+	}
 	
 	var hbitmap w32.HBITMAP
 	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(background))
