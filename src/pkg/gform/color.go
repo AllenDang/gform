@@ -2,7 +2,7 @@ package gform
 
 type Color uint32
 
-func NewColor(r, g, b byte) Color {
+func RGB(r, g, b byte) Color {
 	return Color(uint32(r) | uint32(g)<<8 | uint32(b)<<16)
 }
 

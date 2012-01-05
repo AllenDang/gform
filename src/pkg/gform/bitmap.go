@@ -26,7 +26,7 @@ func assembleBitmapFromHBITMAP(hbitmap w32.HBITMAP) (*Bitmap, error) {
 	}, nil
 }
 
-func NewBitmapFromFile(filepath string) (*Bitmap, error) {
+func NewBitmapFromFile(filepath string, background Color) (*Bitmap, error) {
 	var gpBitmap *uintptr
 	var err error
 
@@ -37,7 +37,7 @@ func NewBitmapFromFile(filepath string) (*Bitmap, error) {
 	defer gdiplus.GdipDisposeImage(gpBitmap)
 
 	var hbitmap w32.HBITMAP
-	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap)
+	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(background))
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func NewBitmapFromFile(filepath string) (*Bitmap, error) {
 	return assembleBitmapFromHBITMAP(hbitmap)
 }
 
-func NewBitmapFromResId(instance w32.HINSTANCE, resId *uint16) (*Bitmap, error) {
+func NewBitmapFromResId(instance w32.HINSTANCE, resId *uint16, background Color) (*Bitmap, error) {
 	var gpBitmap *uintptr
 	var err error
 	
@@ -56,7 +56,7 @@ func NewBitmapFromResId(instance w32.HINSTANCE, resId *uint16) (*Bitmap, error) 
 	defer gdiplus.GdipDisposeImage(gpBitmap)
 	
 	var hbitmap w32.HBITMAP
-	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap)
+	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(background))
 	if err != nil {
 		return nil, err
 	}

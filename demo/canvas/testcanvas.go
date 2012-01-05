@@ -6,7 +6,7 @@ import (
 
 func onpaint(arg *gform.EventArg) {
 	if data, ok := arg.Data().(*gform.PaintEventData); ok {
-		if bmp, err := gform.NewBitmapFromFile("close.png"); err == nil {
+		if bmp, err := gform.NewBitmapFromFile("close.png", gform.RGB(255, 0, 0)); err == nil {
 			data.Canvas.DrawBitmap(bmp, 10, 10)
 			bmp.Dispose()
 		} else {
