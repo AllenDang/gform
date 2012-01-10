@@ -157,6 +157,8 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             this.onCancel.Fire(NewEventArg(this, nil))
             return w32.TRUE
         }
+    case w32.WM_CLOSE:
+        this.Close(w32.IDCANCEL)
     case w32.WM_DESTROY:
         if this.parent == nil {
             Exit()
