@@ -28,7 +28,7 @@ func (this *ImageList) SetImageCount(uNewCount uint) bool {
 	return comctl32.ImageList_SetImageCount(this.handle, uNewCount)
 }
 
-func (this *ImageList) GetImageCount() int {
+func (this *ImageList) ImageCount() int {
 	return comctl32.ImageList_GetImageCount(this.handle)
 }
 
