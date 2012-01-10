@@ -9,7 +9,7 @@ import (
 type Form struct {
     ControlBase
 
-    isDialog bool
+    isDialog   bool
     isDragMove bool
 
     onClose EventManager
@@ -62,11 +62,11 @@ func (this *Form) SetIcon(iconType int, icon *Icon) {
     user32.SendMessage(this.hwnd, w32.WM_SETICON, uintptr(iconType), uintptr(icon.Handle()))
 }
 
-func (this *Form) SetMaxButtonEnabled(b bool) {
+func (this *Form) EnableMaxButton(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_MAXIMIZEBOX)
 }
 
-func (this *Form) SetMinButtonEnabled(b bool) {
+func (this *Form) EnableMinButton(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_MINIMIZEBOX)
 }
 
