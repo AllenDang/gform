@@ -11,8 +11,6 @@ type Form struct {
 
     isDialog   bool
     isDragMove bool
-
-    onClose EventManager
 }
 
 func NewForm(parent Controller) *Form {
@@ -35,11 +33,6 @@ func (this *Form) init(parent Controller) {
     this.ControlBase.init(parent)
 
     RegMsgHandler(this)
-}
-
-// Events
-func (this *Form) OnClose() *EventManager {
-    return &this.onClose
 }
 
 // Public methods
