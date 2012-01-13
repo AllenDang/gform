@@ -22,6 +22,8 @@ func (this *CustomControl) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     case w32.WM_CREATE:
         internalTrackMouseEvent(this.hwnd)
         this.onCreate.Fire(NewEventArg(sender, nil))
+    case w32.WM_CLOSE:
+        this.onClose.Fire(NewEventArg(sender, nil))
     case w32.WM_MOUSEMOVE:
         if this.isMouseLeft {
             this.onMouseHover.Fire(NewEventArg(sender, nil))
