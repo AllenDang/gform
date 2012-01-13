@@ -4,7 +4,6 @@ import (
     "fmt"
     "syscall"
     "unsafe"
-    "unicode/utf16"
     "w32"
     "w32/user32"
     "w32/comctl32"
@@ -18,21 +17,6 @@ func internalTrackMouseEvent(hwnd w32.HWND) {
     tme.DwHoverTime = w32.HOVER_DEFAULT
 
     comctl32.TrackMouseEvent(&tme)
-}
-
-func UTF16PtrToString(cstr *uint16) string {
-    if cstr != nil {
-        us := make([]uint16, 0, 256)
-        for p := uintptr(unsafe.Pointer(cstr)); ; p += 2 {
-            u := *(*uint16)(unsafe.Pointer(p))
-            if u == 0 {
-                return string(utf16.Decode(us))
-            }
-            us = append(us, u)
-        }
-    }
-
-    return ""
 }
 
 func ToggleStyle(hwnd w32.HWND, b bool, style int) {
