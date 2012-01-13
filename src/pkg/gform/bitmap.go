@@ -39,7 +39,8 @@ func NewBitmapFromFile(filepath string, background Color) (*Bitmap, error) {
 	defer gdiplus.GdipDisposeImage(gpBitmap)
 
 	var hbitmap w32.HBITMAP
-	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(background))
+	// Reverse gform.RGB to BGR to satisfy gdiplus color schema.
+	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))
 	if err != nil {
 		return nil, err
 	}
@@ -60,20 +61,22 @@ func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uin
 	pResData := kernel32.LockResource(kernel32.LoadResource(w32.HMODULE(instance), hRes))
 	resBuffer := kernel32.GlobalAlloc(w32.GMEM_MOVEABLE, resSize)
 	pResBuffer := kernel32.GlobalLock(resBuffer)
-	defer kernel32.GlobalUnlock(resBuffer)
-	defer kernel32.GlobalFree(resBuffer)
-
 	kernel32.MoveMemory(pResBuffer, pResData, resSize)
 
 	stream := ole32.CreateStreamOnHGlobal(resBuffer, false)
-	defer stream.Release()
+
 	gpBitmap, err = gdiplus.GdipCreateBitmapFromStream(stream)
 	if err != nil {
 		return nil, err
 	}
+	defer stream.Release()
+	defer kernel32.GlobalUnlock(resBuffer)
+	defer kernel32.GlobalFree(resBuffer)
+	defer gdiplus.GdipDisposeImage(gpBitmap)
 	
 	var hbitmap w32.HBITMAP
-	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(background))
+	// Reverse gform.RGB to BGR to satisfy gdiplus color schema.
+	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))
 	if err != nil {
 		return nil, err
 	}
