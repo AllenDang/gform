@@ -16,6 +16,7 @@ type ControlBase struct {
 
     // General events
     onCreate EventManager
+    onClose EventManager
 
     // Focus events
     onKillFocus EventManager
@@ -79,6 +80,16 @@ func (this *ControlBase) Size() (width, height int) {
     width = int(rect.Right - rect.Left)
     height = int(rect.Bottom - rect.Top)
     return
+}
+
+func (this *ControlBase) Width() int {
+    rect := user32.GetWindowRect(this.hwnd)
+    return int(rect.Right - rect.Left)
+}
+
+func (this *ControlBase) Height() int {
+    rect := user32.GetWindowRect(this.hwnd)
+    return int(rect.Bottom - rect.Top)
 }
 
 func (this *ControlBase) SetPos(x, y int) {
@@ -186,6 +197,10 @@ func (this *ControlBase) PreTranslateMessage(msg *w32.MSG) bool {
 //Events
 func (this *ControlBase) OnCreate() *EventManager {
     return &this.onCreate
+}
+
+func (this *ControlBase) OnClose() *EventManager {
+    return &this.onClose
 }
 
 func (this *ControlBase) OnKillFocus() *EventManager {

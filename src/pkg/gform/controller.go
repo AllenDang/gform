@@ -13,6 +13,8 @@ type Controller interface {
     Parent() Controller
     Pos() (x, y int)
     Size() (w, h int)
+    Height() int
+    Width() int
     Visible() bool
     Bounds() *Rect
     ClientRect() *Rect
@@ -31,6 +33,7 @@ type Controller interface {
 
     //General events
     OnCreate() *EventManager
+    OnClose() *EventManager
 
     // Focus events
     OnKillFocus() *EventManager
