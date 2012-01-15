@@ -44,6 +44,8 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
         ret := msgHandler.WndProc(msg, wparam, lparam)
         if controller, ok := msgHandler.(Controller); ok {
             switch msg {
+            case w32.WM_CLOSE:
+                controller.OnClose().Fire(NewEventArg(controller, nil))
             case w32.WM_KILLFOCUS:
                 controller.OnKillFocus().Fire(NewEventArg(controller, nil))
             case w32.WM_SETFOCUS:
