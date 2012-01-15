@@ -22,7 +22,7 @@ type Controller interface {
     SetEnabled(b bool)
     SetPos(x, y int)
     SetSize(w, h int)
-    SetDragAcceptFilesEnabled(b bool)
+    EnableDragAcceptFiles(b bool)
     Show()
     Hide()
     Font() *Font
