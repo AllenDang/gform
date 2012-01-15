@@ -175,7 +175,7 @@ func (this *ControlBase) SetFont(font *Font) {
     this.font = font
 }
 
-func (this *ControlBase) SetDragAcceptFilesEnabled(b bool) {
+func (this *ControlBase) EnableDragAcceptFiles(b bool) {
     shell32.DragAcceptFiles(this.hwnd, b)
 }
 
