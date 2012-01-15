@@ -98,3 +98,11 @@ func (this *Bitmap) GetHBITMAP() w32.HBITMAP {
 func (this *Bitmap) Size() (int, int) {
 	return this.width, this.height
 }
+
+func (this *Bitmap) Height() int {
+	return this.height
+}
+
+func (this *Bitmap) Width() int {
+	return this.width
+}
