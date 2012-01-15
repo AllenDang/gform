@@ -63,12 +63,21 @@ func (this *Form) EnableMinButton(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_MINIMIZEBOX)
 }
 
-func (this *Form) SetSizable(b bool) {
+func (this *Form) EnableSizable(b bool) {
     ToggleStyle(this.hwnd, b, w32.WS_THICKFRAME)
 }
 
-func (this *Form) SetDragMove(b bool) {
+func (this *Form) EnableDragMove(b bool) {
     this.isDragMove = b
+}
+
+func (this *Form) EnableTopMost(b bool) {
+    tag := w32.HWND_NOTOPMOST
+    if b {
+        tag = w32.HWND_TOPMOST
+    }
+
+    user32.SetWindowPos(this.hwnd, tag, 0, 0, 0, 0, w32.SWP_NOMOVE|w32.SWP_NOSIZE)
 }
 
 func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
@@ -91,7 +100,6 @@ func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
             }
         }
     case w32.WM_CLOSE:
-        this.onClose.Fire(NewEventArg(this, nil))
         user32.DestroyWindow(this.hwnd)
     case w32.WM_DESTROY:
         user32.PostQuitMessage(0)
