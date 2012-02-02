@@ -1,10 +1,10 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
     "syscall"
     "unsafe"
-    "w32"
-    "w32/user32"
 )
 
 type ListView struct {
@@ -180,7 +180,7 @@ func (this *ListView) SetImageList(imageList *ImageList, imageListType int) *Ima
     if h == 0 {
         return nil
     }
-        
+
     return &ImageList{w32.HIMAGELIST(h)}
 }
 

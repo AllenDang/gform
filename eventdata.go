@@ -1,17 +1,17 @@
 package gform
 
 import (
-	"w32"
+	"github.com/AllenDang/w32"
 )
 
 type MouseEventData struct {
-    X, Y int
+    X, Y   int
     Button int
-    Wheel int
+    Wheel  int
 }
 
 type DropFilesEventData struct {
-	X, Y int
+    X, Y  int
 	Files []string
 }
 

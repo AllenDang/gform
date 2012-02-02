@@ -1,10 +1,10 @@
 package gform
 
 import (
-    "unsafe"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
     "syscall"
-    "w32"
-    "w32/user32"
+    "unsafe"
 )
 
 type ToolTip struct {

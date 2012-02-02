@@ -2,9 +2,9 @@ package gform
 
 import (
     "fmt"
-    "w32"
-    "w32/user32"
-    "w32/gdi32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/gdi32"
+    "github.com/AllenDang/w32/user32"
 )
 
 type Canvas struct {

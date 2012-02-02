@@ -1,10 +1,10 @@
 package gform
 
 import (
-    "w32"
-    "w32/user32"
-    "w32/kernel32"
-    "w32/shell32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/kernel32"
+    "github.com/AllenDang/w32/shell32"
+    "github.com/AllenDang/w32/user32"
 )
 
 type ControlBase struct {
@@ -16,7 +16,7 @@ type ControlBase struct {
 
     // General events
     onCreate EventManager
-    onClose EventManager
+    onClose  EventManager
 
     // Focus events
     onKillFocus EventManager
@@ -125,7 +125,6 @@ func (this *ControlBase) Bounds() *Rect {
 
     return ScreenToClientRect(this.hwnd, rect)
 }
-
 
 func (this *ControlBase) ClientRect() *Rect {
     rect := user32.GetClientRect(this.hwnd)

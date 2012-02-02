@@ -2,11 +2,11 @@ package gform
 
 import (
     "fmt"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/comctl32"
+    "github.com/AllenDang/w32/user32"
     "syscall"
     "unsafe"
-    "w32"
-    "w32/user32"
-    "w32/comctl32"
 )
 
 func internalTrackMouseEvent(hwnd w32.HWND) {

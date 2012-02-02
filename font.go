@@ -1,11 +1,11 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/gdi32"
+    "github.com/AllenDang/w32/kernel32"
+    "github.com/AllenDang/w32/user32"
     "syscall"
-    "w32"
-    "w32/kernel32"
-    "w32/gdi32"
-    "w32/user32"
 )
 
 const (
@@ -18,7 +18,6 @@ const (
 func init() {
     DefaultFont = NewFont("MS Shell Dlg 2", 8, 0)
 }
-
 
 type Font struct {
     hfont     w32.HFONT

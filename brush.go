@@ -1,12 +1,12 @@
 package gform
 
 import (
-    "w32"
-    "w32/gdi32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/gdi32"
 )
 
 type Brush struct {
-    hBrush w32.HBRUSH
+    hBrush   w32.HBRUSH
     logBrush w32.LOGBRUSH
 }
 

@@ -1,15 +1,15 @@
 package gform
 
 import (
-    "w32"
-    "w32/user32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
 )
 
 type W32Control struct {
     ControlBase
 
     originalWndProc uintptr
-    isMouseLeft bool
+    isMouseLeft     bool
 }
 
 func (this *W32Control) init(className string, parent Controller, exstyle, style uint) {

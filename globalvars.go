@@ -1,8 +1,8 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
     "syscall"
-    "w32"
 )
 
 //Private global variables.

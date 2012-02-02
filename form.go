@@ -1,9 +1,9 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
     "unsafe"
-    "w32"
-    "w32/user32"
 )
 
 type Form struct {

@@ -1,8 +1,8 @@
 package gform
 
 import (
-    "w32"
-    "w32/user32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
 )
 
 type Edit struct {
@@ -48,8 +48,8 @@ func (this *Edit) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_COMMAND:
         switch w32.HIWORD(uint(wparam)) {
-            case w32.EN_CHANGE:
-                this.onChange.Fire(NewEventArg(this, nil))
+        case w32.EN_CHANGE:
+            this.onChange.Fire(NewEventArg(this, nil))
         }
     }
 

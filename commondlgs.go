@@ -1,13 +1,13 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/comdlg32"
+    "github.com/AllenDang/w32/ole32"
+    "github.com/AllenDang/w32/shell32"
+    "github.com/AllenDang/w32/user32"
     "syscall"
     "unsafe"
-    "w32"
-    "w32/user32"
-    "w32/comdlg32"
-    "w32/ole32"
-    "w32/shell32"
 )
 
 func genOFN(parent Controller, title, filter string, filterIndex uint, initialDir string, buf []uint16) *w32.OPENFILENAME {

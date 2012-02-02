@@ -1,9 +1,9 @@
 package gform
 
 import (
-    "w32"
-    "w32/user32"
-    "w32/shell32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/shell32"
+    "github.com/AllenDang/w32/user32"
 )
 
 func genMouseEventArg(wparam, lparam uintptr) *MouseEventData {

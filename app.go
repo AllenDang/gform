@@ -1,12 +1,12 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/comctl32"
+    "github.com/AllenDang/w32/gdiplus"
+    "github.com/AllenDang/w32/kernel32"
+    "github.com/AllenDang/w32/user32"
     "unsafe"
-    "w32"
-    "w32/kernel32"
-    "w32/user32"
-    "w32/comctl32"
-    "w32/gdiplus"
 )
 
 func Init() {
@@ -19,8 +19,8 @@ func Init() {
     var initCtrls w32.INITCOMMONCONTROLSEX
     initCtrls.DwSize = uint(unsafe.Sizeof(initCtrls))
     initCtrls.DwICC =
-        w32.ICC_LISTVIEW_CLASSES | w32.ICC_PROGRESS_CLASS | w32.ICC_TAB_CLASSES | 
-        w32.ICC_TREEVIEW_CLASSES | w32.ICC_BAR_CLASSES
+        w32.ICC_LISTVIEW_CLASSES | w32.ICC_PROGRESS_CLASS | w32.ICC_TAB_CLASSES |
+            w32.ICC_TREEVIEW_CLASSES | w32.ICC_BAR_CLASSES
 
     comctl32.InitCommonControlsEx(&initCtrls)
 }

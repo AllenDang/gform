@@ -1,9 +1,9 @@
 package gform
 
 import (
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
     "unsafe"
-    "w32"
-    "w32/user32"
 )
 
 type Dialog struct {
@@ -11,7 +11,7 @@ type Dialog struct {
 
     isModal  bool
     template *uint16
-    
+
     Data interface{}
 
     onLoad         EventManager
@@ -104,7 +104,7 @@ func (this *Dialog) ShowModalWithData(data interface{}) (result int) {
 
 func (this *Dialog) Close(result int) {
     this.onClose.Fire(NewEventArg(this, nil))
-    
+
     if this.isModal {
         user32.EndDialog(this.hwnd, uintptr(result))
     } else {

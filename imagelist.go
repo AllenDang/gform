@@ -1,8 +1,8 @@
 package gform
 
 import (
-	"w32"
-	"w32/comctl32"
+	"github.com/AllenDang/w32"
+	"github.com/AllenDang/w32/comctl32"
 )
 
 type ImageList struct {

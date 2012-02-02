@@ -2,16 +2,16 @@ package gform
 
 import (
 	"errors"
+	"github.com/AllenDang/w32"
+	"github.com/AllenDang/w32/gdi32"
+	"github.com/AllenDang/w32/gdiplus"
+	"github.com/AllenDang/w32/kernel32"
+	"github.com/AllenDang/w32/ole32"
 	"unsafe"
-	"w32"
-	"w32/kernel32"
-	"w32/ole32"
-	"w32/gdi32"
-	"w32/gdiplus"
 )
 
 type Bitmap struct {
-	handle w32.HBITMAP
+	handle        w32.HBITMAP
 	width, height int
 }
 
@@ -23,7 +23,7 @@ func assembleBitmapFromHBITMAP(hbitmap w32.HBITMAP) (*Bitmap, error) {
 
 	return &Bitmap{
 		handle: hbitmap,
-		width: dib.DsBmih.BiWidth,
+		width:  dib.DsBmih.BiWidth,
 		height: dib.DsBmih.BiHeight,
 	}, nil
 }
@@ -52,7 +52,7 @@ func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uin
 	var gpBitmap *uintptr
 	var err error
 	var hRes w32.HRSRC
-	
+
 	hRes, err = kernel32.FindResource(w32.HMODULE(instance), resName, resType)
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uin
 	defer kernel32.GlobalUnlock(resBuffer)
 	defer kernel32.GlobalFree(resBuffer)
 	defer gdiplus.GdipDisposeImage(gpBitmap)
-	
+
 	var hbitmap w32.HBITMAP
 	// Reverse gform.RGB to BGR to satisfy gdiplus color schema.
 	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))

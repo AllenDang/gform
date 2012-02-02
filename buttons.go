@@ -1,8 +1,8 @@
 package gform
 
 import (
-    "w32"
-    "w32/user32"
+    "github.com/AllenDang/w32"
+    "github.com/AllenDang/w32/user32"
 )
 
 type Button struct {
@@ -83,7 +83,6 @@ func AttachCheckBox(parent Controller, id int) *CheckBox {
 
     return cb
 }
-
 
 func (this *CheckBox) init(parent Controller) {
     this.W32Control.init("BUTTON", parent, 0, w32.WS_TABSTOP|w32.WS_VISIBLE|w32.WS_CHILD|w32.BS_AUTOCHECKBOX)

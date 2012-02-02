@@ -1,12 +1,12 @@
 package gform
 
 import (
-	"w32"
-	"w32/gdi32"
+	"github.com/AllenDang/w32"
+	"github.com/AllenDang/w32/gdi32"
 )
 
 type Pen struct {
-    hPen w32.HPEN
+    hPen  w32.HPEN
     style uint
     brush *Brush
 }
