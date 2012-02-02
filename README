@@ -46,13 +46,9 @@ Setup
    Updated versions of the Windows Go build are available here:
    http://code.google.com/p/gomingw/downloads/list
    
-2. Because gform access windows API via w32 project, so first of all you will need to install w32. 
-   git clone https://github.com/AllenDang/w32.git
-   cd w32/src && gomake
+2. go get github.com/AllenDang/gform
 
-3. Get the source code and make to install.
-   git clone https://github.com/AllenDang/gform.git
-   cd gform/src && gomake
+3. go install github.com/AllenDang/gform
 
 Have fun now!
 
