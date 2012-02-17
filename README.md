@@ -1,10 +1,10 @@
 About gform
-==========
+===
 
 gform is an easy to use Windows GUI toolkit for Go. It provides two approaches to create UI.
 
 1. Pure code
-=============
+---
 gform.Init()
 
 mainWindow := gform.NewForm(nil)
@@ -21,7 +21,7 @@ mainWindow.Show()
 gform.RunMainLoop()
 
 2. Create dialog in resource file and attach to it
-==================================================
+---
 gform.Init()
 
 dialog := gform.NewDialogFromResId(nil, 101) //101 is the resource Id.
@@ -37,7 +37,7 @@ btn.OnLBDown().Attach(onclick)
 gform.RunMainLoop()
 
 Setup
-=====
+===
 
 1. Make sure you have a working Go installation and build environment, 
    see this go-nuts post for details:
@@ -53,14 +53,14 @@ Setup
 Have fun now!
 
 Recommand Tools
-=================
+===
 1. ResEdit - very good tool to edit resource file, strongly recommand!
 http://www.resedit.net/
 
 2. windres - tools to compile *.rc file to *.o which makes it is possible to embed resource file into *.exe.
 
 Contribute
-==========
+===
 
 Contributions in form of design, code, documentation, bug reporting or other
 ways you see fit are very welcome.
