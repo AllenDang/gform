@@ -4,7 +4,6 @@ About gform
 gform is an easy to use Windows GUI toolkit for Go. It provides two approaches to create UI.
 
 1. Pure code
----
 gform.Init()
 
 mainWindow := gform.NewForm(nil)
@@ -21,7 +20,6 @@ mainWindow.Show()
 gform.RunMainLoop()
 
 2. Create dialog in resource file and attach to it
----
 gform.Init()
 
 dialog := gform.NewDialogFromResId(nil, 101) //101 is the resource Id.
