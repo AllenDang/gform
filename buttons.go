@@ -46,12 +46,14 @@ func AttachPushButton(parent Controller, id int) *PushButton {
 }
 
 func (this *PushButton) init(parent Controller) {
-    this.W32Control.init("BUTTON", parent, 0, w32.BS_NOTIFY|w32.WS_TABSTOP|w32.WS_VISIBLE|w32.WS_CHILD)
+    this.W32Control.init("BUTTON", parent, 0, w32.BS_PUSHBUTTON|w32.WS_TABSTOP|w32.WS_VISIBLE|w32.WS_CHILD)
     RegMsgHandler(this)
 }
 
 func (this *PushButton) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
+    case w32.BN_CLICKED:
+        println("Clicked")
     case w32.WM_LBUTTONDOWN:
         user32.SetCapture(this.Handle())
     case w32.WM_LBUTTONUP:
