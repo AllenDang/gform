@@ -4,6 +4,7 @@ import (
     "github.com/AllenDang/w32"
     "github.com/AllenDang/w32/shell32"
     "github.com/AllenDang/w32/user32"
+    "unsafe"
 )
 
 func genMouseEventArg(wparam, lparam uintptr) *MouseEventData {
@@ -44,6 +45,26 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
         ret := msgHandler.WndProc(msg, wparam, lparam)
         if controller, ok := msgHandler.(Controller); ok {
             switch msg {
+            case w32.WM_NOTIFY: //Reflect notification to control
+                nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
+                if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
+                    ret := msgHandler.WndProc(msg, wparam, lparam)
+                    if ret != 0 {
+                        user32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
+                        return w32.TRUE
+                    }
+                }
+            case w32.WM_COMMAND:
+                if lparam != 0 { //Reflect message to control
+                    h := w32.HWND(lparam)
+                    if msgHandler := GetMsgHandler(h); msgHandler != nil {
+                        ret := msgHandler.WndProc(msg, wparam, lparam)
+                        if ret != 0 {
+                            user32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
+                            return w32.TRUE
+                        }
+                    }
+                }
             case w32.WM_CLOSE:
                 controller.OnClose().Fire(NewEventArg(controller, nil))
             case w32.WM_KILLFOCUS:
