@@ -7,11 +7,22 @@ import (
 
 type CustomControl struct {
 	W32Control
+
+    ClassName      string
+    ExStyle, Style uint
 }
 
 func (this *CustomControl) Init(parent Controller) {
-	RegClassOnlyOnce("gform_customcontrol")
-	this.hwnd = CreateWindow("gform_customcontrol", parent, 0, w32.WS_CHILD|w32.WS_VISIBLE)
+    if len(this.ClassName) == 0 {
+        panic("Class name of custom control cannot be nil")
+    }
+
+	RegClassOnlyOnce(this.ClassName)
+
+    if this.Style == 0 {
+        this.Style = w32.WS_CHILD | w32.WS_VISIBLE
+    }
+	this.hwnd = CreateWindow(this.ClassName, parent, this.ExStyle, this.Style)
     this.isMouseLeft = true
     this.ControlBase.init(parent)
 }
