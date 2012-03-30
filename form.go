@@ -3,7 +3,6 @@ package gform
 import (
     "github.com/AllenDang/w32"
     "github.com/AllenDang/w32/user32"
-    "unsafe"
 )
 
 type Form struct {
@@ -86,18 +85,6 @@ func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         if this.isDragMove {
             user32.ReleaseCapture()
             user32.SendMessage(this.hwnd, w32.WM_NCLBUTTONDOWN, w32.HTCAPTION, 0)
-        }
-    case w32.WM_NOTIFY: //Reflect
-        nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
-        if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
-            return msgHandler.WndProc(msg, wparam, lparam)
-        }
-    case w32.WM_COMMAND: //Reflect
-        if lparam != 0 { //Control
-            h := w32.HWND(lparam)
-            if msgHandler := GetMsgHandler(h); msgHandler != nil {
-                return msgHandler.WndProc(msg, wparam, lparam)
-            }
         }
     case w32.WM_CLOSE:
         user32.DestroyWindow(this.hwnd)

@@ -3,7 +3,6 @@ package gform
 import (
     "github.com/AllenDang/w32"
     "github.com/AllenDang/w32/user32"
-    "unsafe"
 )
 
 type Dialog struct {
@@ -129,26 +128,7 @@ func (this *Dialog) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     case w32.WM_INITDIALOG:
         gDialogWaiting = nil
         this.onLoad.Fire(NewEventArg(this, nil))
-    case w32.WM_NOTIFY:
-        nm := (*w32.NMHDR)(unsafe.Pointer(lparam))
-        if msgHandler := GetMsgHandler(nm.HwndFrom); msgHandler != nil {
-            ret := msgHandler.WndProc(msg, wparam, lparam)
-            if ret != 0 {
-                user32.SetWindowLong(this.hwnd, w32.DWL_MSGRESULT, uint32(ret))
-                return w32.TRUE
-            }
-        }
     case w32.WM_COMMAND:
-        if lparam != 0 { //Reflict message to control
-            h := w32.HWND(lparam)
-            if msgHandler := GetMsgHandler(h); msgHandler != nil {
-                ret := msgHandler.WndProc(msg, wparam, lparam)
-                if ret != 0 {
-                    user32.SetWindowLong(this.hwnd, w32.DWL_MSGRESULT, uint32(ret))
-                    return w32.TRUE
-                }
-            }
-        }
         switch w32.LOWORD(uint(wparam)) {
         case w32.IDOK:
             this.onOK.Fire(NewEventArg(this, nil))
