@@ -1,4 +1,5 @@
-# gform is an easy to use Windows GUI toolkit for Go. It provides two approaches to create UI.
+# gform is an easy to use Windows GUI toolkit for Go. 
+It provides two approaches to create UI.
 
 ## 1. Pure code
 
@@ -35,12 +36,8 @@
 
 # Setup
 
-1. Make sure you have a working Go installation and build environment, 
-   see this go-nuts post for details:
-   http://groups.google.com/group/golang-nuts/msg/5c87630a84f4fd0c
-   
-   Updated versions of the Windows Go build are available here:
-   http://code.google.com/p/gomingw/downloads/list
+1. Make sure you have a working Go installation and build environment, see more for details from below page.
+   http://golang.org/doc/install
    
 2. go get github.com/AllenDang/gform
 
