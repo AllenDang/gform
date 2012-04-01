@@ -14,7 +14,7 @@ type CustomControl struct {
 
 func (this *CustomControl) Init(parent Controller) {
     if len(this.ClassName) == 0 {
-        panic("Class name of custom control cannot be nil")
+        this.ClassName = "gform_customcontrol"
     }
 
 	RegClassOnlyOnce(this.ClassName)
