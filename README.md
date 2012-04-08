@@ -34,7 +34,7 @@ It provides two approaches to create UI.
     
     gform.RunMainLoop()
 
-# event handling
+# Event handling
 gform provides two approaches to handle event. For most commonly used events, convenient event handler is introduced. To handle windows message directly, "Bind" mechanism is introduce.
 
 ## 1. Convenient event handler.
@@ -47,8 +47,10 @@ These kind of event handler follows the same naming convention, "OnSomething".
     ...
 
 If you bind two methods for one event, the first bind will be overwritten by later bind. E.g.
+    
     btn.OnLBUp().Bind(btn_onclick1)
     btn.OnLBUp().Bind(btn_onclick2)
+
 Only "btn_onclick2" will be triggered.
 
 You can also bind "nil" to a event handler, that simply means nothing will be triggered.
@@ -67,11 +69,15 @@ The "Bind" method could bind an event handler directly to a raw windows message.
     }
 
 The event handler uses the same method signature "func(arg *EventArg)", but a new struct named "RawMsg" will be filled to the "data" field of EventArg.
+    
     type RawMsg struct {
         Hwnd           w32.HWND
         Msg            uint
         WParam, LParam uintptr
     } 
+
+The same with convenient event handler, if you bind two methods for one event, the first bind will be overwritten by later bind.
+And bind "nil" to a message is allowed.
 
 # Setup
 
