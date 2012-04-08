@@ -1,7 +1,7 @@
-# gform is an easy to use Windows GUI toolkit for Go. 
+# gform is an easy to use Windows GUI toolkit for Go
 It provides two approaches to create UI.
 
-## 1. Pure code
+## 1. Pure code.
 
     gform.Init()
 
@@ -18,7 +18,7 @@ It provides two approaches to create UI.
     
     gform.RunMainLoop()
 
-## 2. Create dialog in resource file and attach to it
+## 2. Create dialog in resource file and attach to it.
 
     gform.Init()
     
@@ -63,9 +63,9 @@ The "Bind" method could bind an event handler directly to a raw windows message.
 
     func btn_onClipboardUpdate(arg *EventArg) {
         sender := arg.Sender()
-        data := arg.Data()
-
-        println(data.Hwnd, data.Msg, data.WParam, data.LParam)
+        if data, ok := arg.Data().(*gform.RawMsg); ok {
+            println(data.Hwnd, data.Msg, data.WParam, data.LParam)
+        }
     }
 
 The event handler uses the same method signature "func(arg *EventArg)", but a new struct named "RawMsg" will be filled to the "data" field of EventArg.
