@@ -44,6 +44,14 @@ func (this *Edit) SetReadOnly(isReadOnly bool) {
     user32.SendMessage(this.hwnd, w32.EM_SETREADONLY, uintptr(w32.BoolToBOOL(isReadOnly)), 0)
 }
 
+func (this *Edit) AddLine(text string) {
+    if len(this.Caption()) == 0 {
+        this.SetCaption(text)
+    } else {
+        this.SetCaption(this.Caption() + "\r\n" + text)
+    }
+}
+
 func (this *Edit) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_COMMAND:
