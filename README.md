@@ -12,7 +12,7 @@ It provides two approaches to create UI.
     
     btn := gform.NewPushButton(mainWindow)
     btn.SetPos(10, 10)
-    btn.OnLBUp().Attach(btn_onclick)
+    btn.OnLBUp().Bind(btn_onclick)
     
     mainWindow.Show()
     
@@ -33,6 +33,33 @@ It provides two approaches to create UI.
     btn.OnLBDown().Attach(onclick)
     
     gform.RunMainLoop()
+
+# event handling
+## 1. gform provide few convenient methods for most common events, like mouse events and keyboard events. Those events follows the same naming rule, "OnSomething", method has "On" as prefix means it's a event.
+    
+    btn.OnLBUp().Bind(btn_onclick) //LB means Left Button.
+    btn.OnMBUp //MB means middle button
+    btn.OnKillFocus
+    btn.OnDropFiles
+    ...
+
+## 2. gform also provides a method to bind handler to raw windows message.
+
+    btn.Bind(w32.WM_CLIPBOARDUPDATE, btn_onClipboardUpdate)
+
+    func btn_onClipboardUpdate(arg *EventArg) {
+        sender := arg.Sender()
+        data := arg.Data()
+
+        println(data.Hwnd, data.Msg, data.WParam, data.LParam)
+    }
+
+The event handler uses the same method signature "func(arg *EventArg)", but a new struct named "RawMsg" will be filled to the "data" field of EventArg.
+    type RawMsg struct {
+        Hwnd           w32.HWND
+        Msg            uint
+        WParam, LParam uintptr
+    } 
 
 # Setup
 
