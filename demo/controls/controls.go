@@ -1,8 +1,8 @@
 package main
 
 import (
-    "gform"
-    "w32"
+    "github.com/AllenDang/gform"
+    "github.com/AllenDang/w32"
 )
 
 var (
@@ -48,12 +48,12 @@ func main() {
 
     btn := gform.NewPushButton(mainWindow)
     btn.SetPos(10, 10)
-    btn.OnLBDown().Attach(btn_onclick)
-    btn.OnLBUp().Attach(btn_onclick)
-    btn.OnMBDown().Attach(btn_onclick)
-    btn.OnMBUp().Attach(btn_onclick)
-    btn.OnRBDown().Attach(btn_onclick)
-    btn.OnRBUp().Attach(btn_onclick)
+    btn.OnLBDown().Bind(btn_onclick)
+    btn.OnLBUp().Bind(btn_onclick)
+    btn.OnMBDown().Bind(btn_onclick)
+    btn.OnMBUp().Bind(btn_onclick)
+    btn.OnRBDown().Bind(btn_onclick)
+    btn.OnRBUp().Bind(btn_onclick)
 
     tooltip := gform.NewToolTip(mainWindow)
     println(tooltip.AddTool(btn, "Hello world"))
@@ -80,22 +80,22 @@ func main() {
     btnBrowseFolder := gform.NewPushButton(gb1)
     btnBrowseFolder.SetPos(10, 20)
     btnBrowseFolder.SetCaption("Browse Folder Dlg")
-    btnBrowseFolder.OnLBUp().Attach(btnBrowseFolder_onclick)
+    btnBrowseFolder.OnLBUp().Bind(btnBrowseFolder_onclick)
 
     btnOpenFile := gform.NewPushButton(gb1)
     btnOpenFile.SetPos(10, 50)
     btnOpenFile.SetCaption("Open File Dlg")
-    btnOpenFile.OnLBUp().Attach(btnOpenFile_onclick)
+    btnOpenFile.OnLBUp().Bind(btnOpenFile_onclick)
 
     btnSaveFile := gform.NewPushButton(gb1)
     btnSaveFile.SetPos(10, 80)
     btnSaveFile.SetCaption("Save File Dlg")
-    btnSaveFile.OnLBUp().Attach(btnSaveFile_onclick)
+    btnSaveFile.OnLBUp().Bind(btnSaveFile_onclick)
 
     btnMsgBox := gform.NewPushButton(gb1)
     btnMsgBox.SetPos(10, 110)
     btnMsgBox.SetCaption("Msgbox")
-    btnMsgBox.OnLBUp().Attach(btnMsgBox_onclick)
+    btnMsgBox.OnLBUp().Bind(btnMsgBox_onclick)
 
     lb = gform.NewLabel(mainWindow)
     lb.SetPos(130, 10)

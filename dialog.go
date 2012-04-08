@@ -24,8 +24,8 @@ func NewDialogFromResId(parent Controller, resId uint) *Dialog {
     d.isModal = false
     d.template = w32.MakeIntResource(uint16(resId))
 
-    d.OnOK().Attach(dlg_OnOK)
-    d.OnCancel().Attach(dlg_OnCancel)
+    d.OnOK().Bind(dlg_OnOK)
+    d.OnCancel().Bind(dlg_OnCancel)
 
     if parent != nil {
         d.parent = parent

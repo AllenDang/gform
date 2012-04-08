@@ -31,6 +31,10 @@ type Controller interface {
     PreTranslateMessage(msg *w32.MSG) bool
     WndProc(msg uint, wparam, lparam uintptr) uintptr
 
+    //Bind w32 message to handler function
+    Bind(msg uint, handler EventHandler)
+    BindedHandler(msg uint) (EventHandler, bool)
+
     //General events
     OnCreate() *EventManager
     OnClose() *EventManager

@@ -2,7 +2,7 @@ package main
 
 import (
     "fmt"
-    "gform"
+    "github.com/AllenDang/gform"
 )
 
 var (
@@ -24,7 +24,7 @@ func main() {
     edt.SetCaption("Hello")
 
     btn := gform.AttachPushButton(dialog, 2)
-    btn.OnLBDown().Attach(onclick)
+    btn.OnLBDown().Bind(onclick)
 
     lv := gform.AttachListView(dialog, 1002)
 

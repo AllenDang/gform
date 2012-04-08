@@ -21,7 +21,7 @@ func main() {
     gform.Init()
 
     mainform := gform.NewDialogFromResId(nil, IDD_DIALOG1)
-    mainform.OnLoad().Attach(mainform_OnLoad)
+    mainform.OnLoad().Bind(mainform_OnLoad)
     mainform.Center()
     mainform.Show()
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-    "gform"
+    "github.com/AllenDang/gform"
     "time"
 )
 
@@ -35,7 +35,7 @@ func main() {
     btn = gform.NewPushButton(mw)
     btn.SetPos(10, 10)
     btn.SetCaption("Click me")
-    btn.OnLBUp().Attach(onclick)
+    btn.OnLBUp().Bind(onclick)
 
     pb = gform.NewProgressBar(mw)
     pb.SetPos(10, 40)
