@@ -35,7 +35,10 @@ It provides two approaches to create UI.
     gform.RunMainLoop()
 
 # event handling
-## 1. gform provide few convenient methods for most common events, like mouse events and keyboard events. Those events follows the same naming rule, "OnSomething", method has "On" as prefix means it's a event.
+gform provides two approaches to handle event. For most commonly used events, convenient event handler is introduced. To handle windows message directly, "Bind" mechanism is introduce.
+
+## 1. Convenient event handler.
+These kind of event handler follows the same naming convention, "OnSomething".
     
     btn.OnLBUp().Bind(btn_onclick) //LB means Left Button.
     btn.OnMBUp //MB means middle button
@@ -43,7 +46,16 @@ It provides two approaches to create UI.
     btn.OnDropFiles
     ...
 
-## 2. gform also provides a method to bind handler to raw windows message.
+If you bind two methods for one event, the first bind will be overwritten by later bind. E.g.
+    btn.OnLBUp().Bind(btn_onclick1)
+    btn.OnLBUp().Bind(btn_onclick2)
+Only "btn_onclick2" will be triggered.
+
+You can also bind "nil" to a event handler, that simply means nothing will be triggered.
+
+## 2. Raw windows message handler.
+It's a common case that we need to handler various windows messages in GUI, and to wrap them all is basically "mission impossible" (and I don't think a GUI framework should do that frankly), so gform leaves the freedom to user.
+The "Bind" method could bind an event handler directly to a raw windows message. E.g. 
 
     btn.Bind(w32.WM_CLIPBOARDUPDATE, btn_onClipboardUpdate)
 
