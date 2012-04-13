@@ -75,11 +75,13 @@ func (this *Dialog) ShowWithData(data interface{}) {
         parentHwnd = this.Parent().Handle()
     }
 
-    gDialogWaiting = this
-    this.hwnd = user32.CreateDialog(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack)
-    this.Data = data
-    if ico, err := NewIconFromResource(GetAppInstance(), 101); err == nil {
-        this.SetIcon(0, ico)
+    if this.Handle() == 0 {
+        gDialogWaiting = this
+        this.hwnd = user32.CreateDialog(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack)
+        this.Data = data
+        if ico, err := NewIconFromResource(GetAppInstance(), 101); err == nil {
+            this.SetIcon(0, ico)
+        }
     }
     this.Form.Show()
 }
