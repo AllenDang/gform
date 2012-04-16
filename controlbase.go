@@ -2,9 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/kernel32"
-    "github.com/AllenDang/w32/shell32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type ControlBase struct {
@@ -59,37 +56,37 @@ func (this *ControlBase) Handle() w32.HWND {
 }
 
 func (this *ControlBase) SetCaption(caption string) {
-    user32.SetWindowText(this.hwnd, caption)
+    w32.SetWindowText(this.hwnd, caption)
 }
 
 func (this *ControlBase) Caption() string {
-    return user32.GetWindowText(this.hwnd)
+    return w32.GetWindowText(this.hwnd)
 }
 
 func (this *ControlBase) Close() {
     UnRegMsgHandler(this.hwnd)
-    user32.DestroyWindow(this.hwnd)
+    w32.DestroyWindow(this.hwnd)
 }
 
 func (this *ControlBase) SetSize(width, height int) {
     x, y := this.Pos()
-    user32.MoveWindow(this.hwnd, x, y, width, height, true)
+    w32.MoveWindow(this.hwnd, x, y, width, height, true)
 }
 
 func (this *ControlBase) Size() (width, height int) {
-    rect := user32.GetWindowRect(this.hwnd)
+    rect := w32.GetWindowRect(this.hwnd)
     width = int(rect.Right - rect.Left)
     height = int(rect.Bottom - rect.Top)
     return
 }
 
 func (this *ControlBase) Width() int {
-    rect := user32.GetWindowRect(this.hwnd)
+    rect := w32.GetWindowRect(this.hwnd)
     return int(rect.Right - rect.Left)
 }
 
 func (this *ControlBase) Height() int {
-    rect := user32.GetWindowRect(this.hwnd)
+    rect := w32.GetWindowRect(this.hwnd)
     return int(rect.Bottom - rect.Top)
 }
 
@@ -101,25 +98,25 @@ func (this *ControlBase) SetPos(x, y int) {
     if h == 0 {
         h = 25
     }
-    user32.MoveWindow(this.hwnd, x, y, w, h, true)
+    w32.MoveWindow(this.hwnd, x, y, w, h, true)
 }
 
 func (this *ControlBase) Pos() (x, y int) {
-    rect := user32.GetWindowRect(this.hwnd)
+    rect := w32.GetWindowRect(this.hwnd)
     x = int(rect.Left)
     y = int(rect.Top)
     if !this.isForm && this.parent != nil {
-        x, y = user32.ScreenToClient(this.parent.Handle(), x, y)
+        x, y = w32.ScreenToClient(this.parent.Handle(), x, y)
     }
     return
 }
 
 func (this *ControlBase) Visible() bool {
-    return user32.IsWindowVisible(this.hwnd)
+    return w32.IsWindowVisible(this.hwnd)
 }
 
 func (this *ControlBase) Bounds() *Rect {
-    rect := user32.GetWindowRect(this.hwnd)
+    rect := w32.GetWindowRect(this.hwnd)
     if this.isForm {
         return &Rect{*rect}
     }
@@ -128,37 +125,37 @@ func (this *ControlBase) Bounds() *Rect {
 }
 
 func (this *ControlBase) ClientRect() *Rect {
-    rect := user32.GetClientRect(this.hwnd)
+    rect := w32.GetClientRect(this.hwnd)
     return ScreenToClientRect(this.hwnd, rect)
 }
 
 func (this *ControlBase) Show() {
-    user32.ShowWindow(this.hwnd, w32.SW_SHOWDEFAULT)
+    w32.ShowWindow(this.hwnd, w32.SW_SHOWDEFAULT)
 }
 
 func (this *ControlBase) Hide() {
-    user32.ShowWindow(this.hwnd, w32.SW_HIDE)
+    w32.ShowWindow(this.hwnd, w32.SW_HIDE)
 }
 
 func (this *ControlBase) Enabled() bool {
-    return user32.IsWindowEnabled(this.hwnd)
+    return w32.IsWindowEnabled(this.hwnd)
 }
 
 func (this *ControlBase) SetEnabled(b bool) {
-    user32.EnableWindow(this.hwnd, b)
+    w32.EnableWindow(this.hwnd, b)
 }
 
 func (this *ControlBase) Focus() {
-    user32.SetFocus(this.hwnd)
+    w32.SetFocus(this.hwnd)
 }
 
 func (this *ControlBase) Invalidate(erase bool) {
-    pRect := user32.GetClientRect(this.hwnd)
+    pRect := w32.GetClientRect(this.hwnd)
     if this.isForm {
-        user32.InvalidateRect(this.hwnd, pRect, erase)
+        w32.InvalidateRect(this.hwnd, pRect, erase)
     } else {
         rc := ScreenToClientRect(this.hwnd, pRect)
-        user32.InvalidateRect(this.hwnd, rc.GetW32Rect(), erase)
+        w32.InvalidateRect(this.hwnd, rc.GetW32Rect(), erase)
     }
 }
 
@@ -171,12 +168,12 @@ func (this *ControlBase) Font() *Font {
 }
 
 func (this *ControlBase) SetFont(font *Font) {
-    user32.SendMessage(this.hwnd, w32.WM_SETFONT, uintptr(font.hfont), 1)
+    w32.SendMessage(this.hwnd, w32.WM_SETFONT, uintptr(font.hfont), 1)
     this.font = font
 }
 
 func (this *ControlBase) EnableDragAcceptFiles(b bool) {
-    shell32.DragAcceptFiles(this.hwnd, b)
+    w32.DragAcceptFiles(this.hwnd, b)
 }
 
 func (this *ControlBase) InvokeRequired() bool {
@@ -184,8 +181,8 @@ func (this *ControlBase) InvokeRequired() bool {
         return false
     }
 
-    windowThreadId, _ := user32.GetWindowThreadProcessId(this.hwnd)
-    currentThreadId := kernel32.GetCurrentThread()
+    windowThreadId, _ := w32.GetWindowThreadProcessId(this.hwnd)
+    currentThreadId := w32.GetCurrentThread()
 
     return windowThreadId != currentThreadId
 }

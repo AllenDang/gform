@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type W32Control struct {
@@ -18,7 +17,7 @@ func (this *W32Control) init(className string, parent Controller, exstyle, style
         panic("cannot create window for " + className)
     }
     this.isMouseLeft = true
-    this.originalWndProc = user32.SetWindowLongPtr(this.hwnd, w32.GWLP_WNDPROC, GeneralWndprocCallBack)
+    this.originalWndProc = w32.SetWindowLongPtr(this.hwnd, w32.GWLP_WNDPROC, GeneralWndprocCallBack)
     this.ControlBase.init(parent)
 }
 
@@ -27,12 +26,12 @@ func (this *W32Control) attach(parent Controller, dlgItemID int) {
         panic("parent cannot be nil")
     }
 
-    if this.hwnd = user32.GetDlgItem(parent.Handle(), dlgItemID); this.hwnd == 0 {
+    if this.hwnd = w32.GetDlgItem(parent.Handle(), dlgItemID); this.hwnd == 0 {
         panic("hwnd cannot be nil")
     }
 
     this.isMouseLeft = true
-    this.originalWndProc = user32.SetWindowLongPtr(this.hwnd, w32.GWLP_WNDPROC, GeneralWndprocCallBack)
+    this.originalWndProc = w32.SetWindowLongPtr(this.hwnd, w32.GWLP_WNDPROC, GeneralWndprocCallBack)
     this.ControlBase.init(parent)
 }
 
@@ -51,5 +50,5 @@ func (this *W32Control) WndProc(msg uint, wparam, lparam uintptr) uintptr {
         this.onMouseLeave.Fire(NewEventArg(this, nil))
         this.isMouseLeft = true
     }
-    return user32.CallWindowProc(this.originalWndProc, this.hwnd, msg, wparam, lparam)
+    return w32.CallWindowProc(this.originalWndProc, this.hwnd, msg, wparam, lparam)
 }

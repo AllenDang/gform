@@ -2,8 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/shell32"
-    "github.com/AllenDang/w32/user32"
     "unsafe"
 )
 
@@ -20,17 +18,17 @@ func genDropFilesEventArg(wparam uintptr) *DropFilesEventData {
     hDrop := w32.HDROP(wparam)
 
     var data DropFilesEventData
-    _, fileCount := shell32.DragQueryFile(hDrop, 0xFFFFFFFF)
+    _, fileCount := w32.DragQueryFile(hDrop, 0xFFFFFFFF)
     data.Files = make([]string, fileCount)
 
     var i uint
     for i = 0; i < fileCount; i++ {
-        data.Files[i], _ = shell32.DragQueryFile(hDrop, i)
+        data.Files[i], _ = w32.DragQueryFile(hDrop, i)
     }
 
-    data.X, data.Y, _ = shell32.DragQueryPoint(hDrop)
+    data.X, data.Y, _ = w32.DragQueryPoint(hDrop)
 
-    shell32.DragFinish(hDrop)
+    w32.DragFinish(hDrop)
 
     return &data
 }
@@ -49,7 +47,7 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
             if controller := GetMsgHandler(nm.HwndFrom); controller != nil {
                 ret := controller.WndProc(msg, wparam, lparam)
                 if ret != 0 {
-                    user32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
+                    w32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
                     return w32.TRUE
                 }
             }
@@ -59,7 +57,7 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
                 if controller := GetMsgHandler(h); controller != nil {
                     ret := controller.WndProc(msg, wparam, lparam)
                     if ret != 0 {
-                        user32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
+                        w32.SetWindowLong(hwnd, w32.DWL_MSGRESULT, uint32(ret))
                         return w32.TRUE
                     }
                 }
@@ -100,5 +98,5 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
         return ret
     }
 
-    return user32.DefWindowProc(hwnd, msg, wparam, lparam)
+    return w32.DefWindowProc(hwnd, msg, wparam, lparam)
 }

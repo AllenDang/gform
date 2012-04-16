@@ -2,15 +2,11 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/comctl32"
-    "github.com/AllenDang/w32/gdiplus"
-    "github.com/AllenDang/w32/kernel32"
-    "github.com/AllenDang/w32/user32"
     "unsafe"
 )
 
 func Init() {
-    gAppInstance = kernel32.GetModuleHandle("")
+    gAppInstance = w32.GetModuleHandle("")
     if gAppInstance == 0 {
         panic("Error occurred in App.Init")
     }
@@ -22,7 +18,7 @@ func Init() {
         w32.ICC_LISTVIEW_CLASSES | w32.ICC_PROGRESS_CLASS | w32.ICC_TAB_CLASSES |
             w32.ICC_TREEVIEW_CLASSES | w32.ICC_BAR_CLASSES
 
-    comctl32.InitCommonControlsEx(&initCtrls)
+    w32.InitCommonControlsEx(&initCtrls)
 }
 
 func GetAppInstance() w32.HINSTANCE {
@@ -57,18 +53,18 @@ func PreTranslateMessage(msg *w32.MSG) bool {
 func RunMainLoop() int {
     var m w32.MSG
 
-    for user32.GetMessage(&m, 0, 0, 0) != 0 {
+    for w32.GetMessage(&m, 0, 0, 0) != 0 {
         if !PreTranslateMessage(&m) {
-            user32.TranslateMessage(&m)
-            user32.DispatchMessage(&m)
+            w32.TranslateMessage(&m)
+            w32.DispatchMessage(&m)
         }
     }
 
-    gdiplus.GdiplusShutdown()
+    w32.GdiplusShutdown()
 
     return int(m.WParam)
 }
 
 func Exit() {
-    user32.PostQuitMessage(0)
+    w32.PostQuitMessage(0)
 }

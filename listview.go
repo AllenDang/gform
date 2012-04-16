@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
     "syscall"
     "unsafe"
 )
@@ -30,7 +29,7 @@ func AttachListView(parent Controller, id int) *ListView {
     lv.attach(parent, id)
     RegMsgHandler(lv)
 
-    user32.SendMessage(lv.Handle(), w32.LVM_SETUNICODEFORMAT, w32.TRUE, 0)
+    w32.SendMessage(lv.Handle(), w32.LVM_SETUNICODEFORMAT, w32.TRUE, 0)
     return lv
 }
 
@@ -44,7 +43,7 @@ func (this *ListView) setItemState(i int, state, mask uint) {
     var item w32.LVITEM
     item.State, item.StateMask = state, mask
 
-    user32.SendMessage(this.hwnd, w32.LVM_SETITEMSTATE, uintptr(i), uintptr(unsafe.Pointer(&item)))
+    w32.SendMessage(this.hwnd, w32.LVM_SETITEMSTATE, uintptr(i), uintptr(unsafe.Pointer(&item)))
 }
 
 func (this *ListView) EnableSingleSelect(enable bool) {
@@ -65,34 +64,34 @@ func (this *ListView) EnableEditLabels(enable bool) {
 
 func (this *ListView) EnableFullRowSelect(enable bool) {
     if enable {
-        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_FULLROWSELECT)
+        w32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_FULLROWSELECT)
     } else {
-        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_FULLROWSELECT, 0)
+        w32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_FULLROWSELECT, 0)
     }
 }
 
 func (this *ListView) EnableDoubleBuffer(enable bool) {
     if enable {
-        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_DOUBLEBUFFER)
+        w32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_DOUBLEBUFFER)
     } else {
-        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_DOUBLEBUFFER, 0)
+        w32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_DOUBLEBUFFER, 0)
     }
 }
 
 func (this *ListView) EnableHotTrack(enable bool) {
     if enable {
-        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_TRACKSELECT)
+        w32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, w32.LVS_EX_TRACKSELECT)
     } else {
-        user32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_TRACKSELECT, 0)
+        w32.SendMessage(this.hwnd, w32.LVM_SETEXTENDEDLISTVIEWSTYLE, w32.LVS_EX_TRACKSELECT, 0)
     }
 }
 
 func (this *ListView) SetItemCount(count int) bool {
-    return user32.SendMessage(this.hwnd, w32.LVM_SETITEMCOUNT, uintptr(count), 0) != 0
+    return w32.SendMessage(this.hwnd, w32.LVM_SETITEMCOUNT, uintptr(count), 0) != 0
 }
 
 func (this *ListView) ItemCount() int {
-    return int(user32.SendMessage(this.hwnd, w32.LVM_GETITEMCOUNT, 0, 0))
+    return int(w32.SendMessage(this.hwnd, w32.LVM_GETITEMCOUNT, 0, 0))
 }
 
 func (this *ListView) InsertColumn(caption string, width int, iCol int) {
@@ -126,23 +125,23 @@ func (this *ListView) AddItem(text ...string) {
 }
 
 func (this *ListView) InsertLvColumn(lvColumn *w32.LVCOLUMN, iCol int) {
-    user32.SendMessage(this.hwnd, w32.LVM_INSERTCOLUMN, uintptr(iCol), uintptr(unsafe.Pointer(lvColumn)))
+    w32.SendMessage(this.hwnd, w32.LVM_INSERTCOLUMN, uintptr(iCol), uintptr(unsafe.Pointer(lvColumn)))
 }
 
 func (this *ListView) InsertLvItem(lvItem *w32.LVITEM) {
-    user32.SendMessage(this.hwnd, w32.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(lvItem)))
+    w32.SendMessage(this.hwnd, w32.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(lvItem)))
 }
 
 func (this *ListView) SetLvItem(lvItem *w32.LVITEM) {
-    user32.SendMessage(this.hwnd, w32.LVM_SETITEM, 0, uintptr(unsafe.Pointer(lvItem)))
+    w32.SendMessage(this.hwnd, w32.LVM_SETITEM, 0, uintptr(unsafe.Pointer(lvItem)))
 }
 
 func (this *ListView) DeleteAllItems() bool {
-    return user32.SendMessage(this.hwnd, w32.LVM_DELETEALLITEMS, 0, 0) == w32.TRUE
+    return w32.SendMessage(this.hwnd, w32.LVM_DELETEALLITEMS, 0, 0) == w32.TRUE
 }
 
 func (this *ListView) Item(item *w32.LVITEM) bool {
-    return user32.SendMessage(this.hwnd, w32.LVM_GETITEM, 0, uintptr(unsafe.Pointer(item))) == w32.TRUE
+    return w32.SendMessage(this.hwnd, w32.LVM_GETITEM, 0, uintptr(unsafe.Pointer(item))) == w32.TRUE
 }
 
 func (this *ListView) ItemAtIndex(i int) *w32.LVITEM {
@@ -161,7 +160,7 @@ func (this *ListView) SelectedItems(mask uint) []*w32.LVITEM {
 
     var i int = -1
     for {
-        if i = int(user32.SendMessage(this.hwnd, w32.LVM_GETNEXTITEM, uintptr(i), uintptr(w32.LVNI_SELECTED))); i == -1 {
+        if i = int(w32.SendMessage(this.hwnd, w32.LVM_GETNEXTITEM, uintptr(i), uintptr(w32.LVNI_SELECTED))); i == -1 {
             break
         }
 
@@ -176,7 +175,7 @@ func (this *ListView) SelectedItems(mask uint) []*w32.LVITEM {
 }
 
 func (this *ListView) SelectedCount() uint {
-    return uint(user32.SendMessage(this.hwnd, w32.LVM_GETSELECTEDCOUNT, 0, 0))
+    return uint(w32.SendMessage(this.hwnd, w32.LVM_GETSELECTEDCOUNT, 0, 0))
 }
 
 // Set i to -1 to select all items.
@@ -185,7 +184,7 @@ func (this *ListView) SetSelectedItem(i int) {
 }
 
 func (this *ListView) SetImageList(imageList *ImageList, imageListType int) *ImageList {
-    h := user32.SendMessage(this.hwnd, w32.LVM_SETIMAGELIST, uintptr(imageListType), uintptr(imageList.Handle()))
+    h := w32.SendMessage(this.hwnd, w32.LVM_SETIMAGELIST, uintptr(imageListType), uintptr(imageList.Handle()))
     if h == 0 {
         return nil
     }
@@ -194,7 +193,7 @@ func (this *ListView) SetImageList(imageList *ImageList, imageListType int) *Ima
 }
 
 func (this *ListView) ImageList(imageListType int) *ImageList {
-    h := user32.SendMessage(this.hwnd, w32.LVM_GETIMAGELIST, uintptr(imageListType), 0)
+    h := w32.SendMessage(this.hwnd, w32.LVM_GETIMAGELIST, uintptr(imageListType), 0)
     if h == 0 {
         return nil
     }

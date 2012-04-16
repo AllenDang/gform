@@ -3,10 +3,6 @@ package gform
 import (
 	"errors"
 	"github.com/AllenDang/w32"
-	"github.com/AllenDang/w32/gdi32"
-	"github.com/AllenDang/w32/gdiplus"
-	"github.com/AllenDang/w32/kernel32"
-	"github.com/AllenDang/w32/ole32"
 	"unsafe"
 )
 
@@ -17,7 +13,7 @@ type Bitmap struct {
 
 func assembleBitmapFromHBITMAP(hbitmap w32.HBITMAP) (*Bitmap, error) {
 	var dib w32.DIBSECTION
-	if gdi32.GetObject(w32.HGDIOBJ(hbitmap), unsafe.Sizeof(dib), unsafe.Pointer(&dib)) == 0 {
+	if w32.GetObject(w32.HGDIOBJ(hbitmap), unsafe.Sizeof(dib), unsafe.Pointer(&dib)) == 0 {
 		return nil, errors.New("GetObject for HBITMAP failed")
 	}
 
@@ -32,15 +28,15 @@ func NewBitmapFromFile(filepath string, background Color) (*Bitmap, error) {
 	var gpBitmap *uintptr
 	var err error
 
-	gpBitmap, err = gdiplus.GdipCreateBitmapFromFile(filepath)
+	gpBitmap, err = w32.GdipCreateBitmapFromFile(filepath)
 	if err != nil {
 		return nil, err
 	}
-	defer gdiplus.GdipDisposeImage(gpBitmap)
+	defer w32.GdipDisposeImage(gpBitmap)
 
 	var hbitmap w32.HBITMAP
 	// Reverse gform.RGB to BGR to satisfy gdiplus color schema.
-	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))
+	hbitmap, err = w32.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))
 	if err != nil {
 		return nil, err
 	}
@@ -53,30 +49,30 @@ func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uin
 	var err error
 	var hRes w32.HRSRC
 
-	hRes, err = kernel32.FindResource(w32.HMODULE(instance), resName, resType)
+	hRes, err = w32.FindResource(w32.HMODULE(instance), resName, resType)
 	if err != nil {
 		return nil, err
 	}
-	resSize := kernel32.SizeofResource(w32.HMODULE(instance), hRes)
-	pResData := kernel32.LockResource(kernel32.LoadResource(w32.HMODULE(instance), hRes))
-	resBuffer := kernel32.GlobalAlloc(w32.GMEM_MOVEABLE, resSize)
-	pResBuffer := kernel32.GlobalLock(resBuffer)
-	kernel32.MoveMemory(pResBuffer, pResData, resSize)
+	resSize := w32.SizeofResource(w32.HMODULE(instance), hRes)
+	pResData := w32.LockResource(w32.LoadResource(w32.HMODULE(instance), hRes))
+	resBuffer := w32.GlobalAlloc(w32.GMEM_MOVEABLE, resSize)
+	pResBuffer := w32.GlobalLock(resBuffer)
+	w32.MoveMemory(pResBuffer, pResData, resSize)
 
-	stream := ole32.CreateStreamOnHGlobal(resBuffer, false)
+	stream := w32.CreateStreamOnHGlobal(resBuffer, false)
 
-	gpBitmap, err = gdiplus.GdipCreateBitmapFromStream(stream)
+	gpBitmap, err = w32.GdipCreateBitmapFromStream(stream)
 	if err != nil {
 		return nil, err
 	}
 	defer stream.Release()
-	defer kernel32.GlobalUnlock(resBuffer)
-	defer kernel32.GlobalFree(resBuffer)
-	defer gdiplus.GdipDisposeImage(gpBitmap)
+	defer w32.GlobalUnlock(resBuffer)
+	defer w32.GlobalFree(resBuffer)
+	defer w32.GdipDisposeImage(gpBitmap)
 
 	var hbitmap w32.HBITMAP
 	// Reverse gform.RGB to BGR to satisfy gdiplus color schema.
-	hbitmap, err = gdiplus.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))
+	hbitmap, err = w32.GdipCreateHBITMAPFromBitmap(gpBitmap, uint32(RGB(background.B(), background.G(), background.R())))
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +82,7 @@ func NewBitmapFromResource(instance w32.HINSTANCE, resName *uint16, resType *uin
 
 func (this *Bitmap) Dispose() {
 	if this.handle != 0 {
-		gdi32.DeleteObject(w32.HGDIOBJ(this.handle))
+		w32.DeleteObject(w32.HGDIOBJ(this.handle))
 		this.handle = 0
 	}
 }

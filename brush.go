@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/gdi32"
 )
 
 type Brush struct {
@@ -12,7 +11,7 @@ type Brush struct {
 
 func NewSolidColorBrush(color Color) *Brush {
     lb := w32.LOGBRUSH{LbStyle: w32.BS_SOLID, LbColor: w32.COLORREF(color)}
-    hBrush := gdi32.CreateBrushIndirect(&lb)
+    hBrush := w32.CreateBrushIndirect(&lb)
     if hBrush == 0 {
         panic("Faild to create solid color brush")
     }
@@ -22,7 +21,7 @@ func NewSolidColorBrush(color Color) *Brush {
 
 func NewNullBrush() *Brush {
     lb := w32.LOGBRUSH{LbStyle: w32.BS_NULL}
-    hBrush := gdi32.CreateBrushIndirect(&lb)
+    hBrush := w32.CreateBrushIndirect(&lb)
     if hBrush == 0 {
         panic("Failed to create null brush")
     }
@@ -40,7 +39,7 @@ func (this *Brush) GetLOGBRUSH() *w32.LOGBRUSH {
 
 func (this *Brush) Dispose() {
     if this.hBrush != 0 {
-        gdi32.DeleteObject(w32.HGDIOBJ(this.hBrush))
+        w32.DeleteObject(w32.HGDIOBJ(this.hBrush))
         this.hBrush = 0
     }
 }

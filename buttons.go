@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type Button struct {
@@ -10,7 +9,7 @@ type Button struct {
 }
 
 func (this *Button) Checked() bool {
-    result := user32.SendMessage(this.hwnd, w32.BM_GETCHECK, 0, 0)
+    result := w32.SendMessage(this.hwnd, w32.BM_GETCHECK, 0, 0)
     return result == w32.BST_CHECKED
 }
 
@@ -19,7 +18,7 @@ func (this *Button) SetChecked(checked bool) {
     if !checked {
         wparam = w32.BST_UNCHECKED
     }
-    user32.SendMessage(this.hwnd, w32.BM_SETCHECK, uintptr(wparam), 0)
+    w32.SendMessage(this.hwnd, w32.BM_SETCHECK, uintptr(wparam), 0)
 }
 
 type PushButton struct {
@@ -55,9 +54,9 @@ func (this *PushButton) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     case w32.BN_CLICKED:
         println("Clicked")
     case w32.WM_LBUTTONDOWN:
-        user32.SetCapture(this.Handle())
+        w32.SetCapture(this.Handle())
     case w32.WM_LBUTTONUP:
-        user32.ReleaseCapture()
+        w32.ReleaseCapture()
     }
 
     return this.W32Control.WndProc(msg, wparam, lparam)

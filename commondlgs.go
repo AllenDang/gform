@@ -2,10 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/comdlg32"
-    "github.com/AllenDang/w32/ole32"
-    "github.com/AllenDang/w32/shell32"
-    "github.com/AllenDang/w32/user32"
     "syscall"
     "unsafe"
 )
@@ -47,7 +43,7 @@ func ShowOpenFileDlg(parent Controller, title, filter string, filterIndex uint, 
     buf := make([]uint16, 1024)
     ofn := genOFN(parent, title, filter, filterIndex, initialDir, buf)
 
-    if accepted = comdlg32.GetOpenFileName(ofn); accepted {
+    if accepted = w32.GetOpenFileName(ofn); accepted {
         filePath = syscall.UTF16ToString(buf)
     }
 
@@ -58,7 +54,7 @@ func ShowSaveFileDlg(parent Controller, title, filter string, filterIndex uint, 
     buf := make([]uint16, 1024)
     ofn := genOFN(parent, title, filter, filterIndex, initialDir, buf)
 
-    if accepted = comdlg32.GetSaveFileName(ofn); accepted {
+    if accepted = w32.GetSaveFileName(ofn); accepted {
         filePath = syscall.UTF16ToString(buf)
     }
 
@@ -71,11 +67,11 @@ func ShowBrowseFolderDlg(parent Controller, title string) (folder string, accept
     bi.Title = syscall.StringToUTF16Ptr(title)
     bi.Flags = w32.BIF_RETURNONLYFSDIRS | w32.BIF_NEWDIALOGSTYLE
 
-    ole32.CoInitialize()
-    ret := shell32.SHBrowseForFolder(&bi)
-    ole32.CoUninitialize()
+    w32.CoInitialize()
+    ret := w32.SHBrowseForFolder(&bi)
+    w32.CoUninitialize()
 
-    folder = shell32.SHGetPathFromIDList(ret)
+    folder = w32.SHGetPathFromIDList(ret)
     accepted = folder != ""
     return
 }
@@ -83,9 +79,9 @@ func ShowBrowseFolderDlg(parent Controller, title string) (folder string, accept
 func MsgBox(parent Controller, title, caption string, flags uint) int {
     var result int
     if parent != nil {
-        result = user32.MessageBox(parent.Handle(), caption, title, flags)
+        result = w32.MessageBox(parent.Handle(), caption, title, flags)
     } else {
-        result = user32.MessageBox(0, caption, title, flags)
+        result = w32.MessageBox(0, caption, title, flags)
     }
 
     return result

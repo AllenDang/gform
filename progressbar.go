@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type ProgressBar struct {
@@ -24,20 +23,20 @@ func (this *ProgressBar) init(parent Controller) {
 }
 
 func (this *ProgressBar) Value() uint {
-    ret := user32.SendMessage(this.hwnd, w32.PBM_GETPOS, 0, 0)
+    ret := w32.SendMessage(this.hwnd, w32.PBM_GETPOS, 0, 0)
     return uint(ret)
 }
 
 func (this *ProgressBar) SetValue(v uint) {
-    user32.SendMessage(this.hwnd, w32.PBM_SETPOS, uintptr(v), 0)
+    w32.SendMessage(this.hwnd, w32.PBM_SETPOS, uintptr(v), 0)
 }
 
 func (this *ProgressBar) Range() (min, max uint) {
-    min = uint(user32.SendMessage(this.hwnd, w32.PBM_GETRANGE, uintptr(w32.BoolToBOOL(true)), 0))
-    max = uint(user32.SendMessage(this.hwnd, w32.PBM_GETRANGE, uintptr(w32.BoolToBOOL(false)), 0))
+    min = uint(w32.SendMessage(this.hwnd, w32.PBM_GETRANGE, uintptr(w32.BoolToBOOL(true)), 0))
+    max = uint(w32.SendMessage(this.hwnd, w32.PBM_GETRANGE, uintptr(w32.BoolToBOOL(false)), 0))
     return
 }
 
 func (this *ProgressBar) SetRange(min, max uint) {
-    user32.SendMessage(this.hwnd, w32.PBM_SETRANGE32, uintptr(min), uintptr(max))
+    w32.SendMessage(this.hwnd, w32.PBM_SETRANGE32, uintptr(min), uintptr(max))
 }

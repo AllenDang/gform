@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type Form struct {
@@ -36,8 +35,8 @@ func (this *Form) init(parent Controller) {
 
 // Public methods
 func (this *Form) Center() {
-    sWidth := user32.GetSystemMetrics(w32.SM_CXFULLSCREEN)
-    sHeight := user32.GetSystemMetrics(w32.SM_CYFULLSCREEN)
+    sWidth := w32.GetSystemMetrics(w32.SM_CXFULLSCREEN)
+    sHeight := w32.GetSystemMetrics(w32.SM_CYFULLSCREEN)
 
     if sWidth != 0 && sHeight != 0 {
         w, h := this.Size()
@@ -51,7 +50,7 @@ func (this *Form) SetIcon(iconType int, icon *Icon) {
         panic("IconType is invalid")
     }
 
-    user32.SendMessage(this.hwnd, w32.WM_SETICON, uintptr(iconType), uintptr(icon.Handle()))
+    w32.SendMessage(this.hwnd, w32.WM_SETICON, uintptr(iconType), uintptr(icon.Handle()))
 }
 
 func (this *Form) EnableMaxButton(b bool) {
@@ -76,21 +75,21 @@ func (this *Form) EnableTopMost(b bool) {
         tag = w32.HWND_TOPMOST
     }
 
-    user32.SetWindowPos(this.hwnd, tag, 0, 0, 0, 0, w32.SWP_NOMOVE|w32.SWP_NOSIZE)
+    w32.SetWindowPos(this.hwnd, tag, 0, 0, 0, 0, w32.SWP_NOMOVE|w32.SWP_NOSIZE)
 }
 
 func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
     switch msg {
     case w32.WM_LBUTTONDOWN:
         if this.isDragMove {
-            user32.ReleaseCapture()
-            user32.SendMessage(this.hwnd, w32.WM_NCLBUTTONDOWN, w32.HTCAPTION, 0)
+            w32.ReleaseCapture()
+            w32.SendMessage(this.hwnd, w32.WM_NCLBUTTONDOWN, w32.HTCAPTION, 0)
         }
     case w32.WM_CLOSE:
-        user32.DestroyWindow(this.hwnd)
+        w32.DestroyWindow(this.hwnd)
     case w32.WM_DESTROY:
-        user32.PostQuitMessage(0)
+        w32.PostQuitMessage(0)
     }
 
-    return user32.DefWindowProc(this.hwnd, msg, wparam, lparam)
+    return w32.DefWindowProc(this.hwnd, msg, wparam, lparam)
 }

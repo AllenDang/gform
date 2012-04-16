@@ -2,9 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/gdi32"
-    "github.com/AllenDang/w32/kernel32"
-    "github.com/AllenDang/w32/user32"
     "syscall"
 )
 
@@ -32,9 +29,9 @@ func NewFont(family string, pointSize int, style byte) *Font {
     }
 
     //Retrive screen DPI
-    hDC := user32.GetDC(0)
-    defer user32.ReleaseDC(0, hDC)
-    screenDPIY := gdi32.GetDeviceCaps(hDC, w32.LOGPIXELSY)
+    hDC := w32.GetDC(0)
+    defer w32.ReleaseDC(0, hDC)
+    screenDPIY := w32.GetDeviceCaps(hDC, w32.LOGPIXELSY)
 
     font := Font{
         family:    family,
@@ -53,7 +50,7 @@ func NewFont(family string, pointSize int, style byte) *Font {
 func (this *Font) createForDPI(dpi int) w32.HFONT {
     var lf w32.LOGFONT
 
-    lf.Height = -kernel32.MulDiv(this.pointSize, dpi, 72)
+    lf.Height = -w32.MulDiv(this.pointSize, dpi, 72)
     if this.style&FontBold > 0 {
         lf.Weight = w32.FW_BOLD
     } else {
@@ -78,7 +75,7 @@ func (this *Font) createForDPI(dpi int) w32.HFONT {
     dest := lf.FaceName[:]
     copy(dest, src)
 
-    return gdi32.CreateFontIndirect(&lf)
+    return w32.CreateFontIndirect(&lf)
 }
 
 func (this *Font) GetHFONT() w32.HFONT {
@@ -91,7 +88,7 @@ func (this *Font) Bold() bool {
 
 func (this *Font) Dispose() {
     if this.hfont != 0 {
-        gdi32.DeleteObject(w32.HGDIOBJ(this.hfont))
+        w32.DeleteObject(w32.HGDIOBJ(this.hfont))
     }
 }
 

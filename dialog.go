@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type Dialog struct {
@@ -77,7 +76,7 @@ func (this *Dialog) ShowWithData(data interface{}) {
 
     if this.Handle() == 0 {
         gDialogWaiting = this
-        this.hwnd = user32.CreateDialog(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack)
+        this.hwnd = w32.CreateDialog(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack)
         this.Data = data
         if ico, err := NewIconFromResource(GetAppInstance(), 101); err == nil {
             this.SetIcon(0, ico)
@@ -96,7 +95,7 @@ func (this *Dialog) ShowModalWithData(data interface{}) (result int) {
     }
 
     gDialogWaiting = this
-    if result = user32.DialogBox(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack); result == -1 {
+    if result = w32.DialogBox(GetAppInstance(), this.template, parentHwnd, GeneralWndprocCallBack); result == -1 {
         panic("Failed to create modal dialog box")
     }
 
@@ -107,9 +106,9 @@ func (this *Dialog) Close(result int) {
     this.onClose.Fire(NewEventArg(this, nil))
 
     if this.isModal {
-        user32.EndDialog(this.hwnd, uintptr(result))
+        w32.EndDialog(this.hwnd, uintptr(result))
     } else {
-        user32.DestroyWindow(this.hwnd)
+        w32.DestroyWindow(this.hwnd)
     }
 
     UnRegMsgHandler(this.hwnd)
@@ -117,7 +116,7 @@ func (this *Dialog) Close(result int) {
 
 func (this *Dialog) PreTranslateMessage(msg *w32.MSG) bool {
     if msg.Message >= w32.WM_KEYFIRST && msg.Message <= w32.WM_KEYLAST {
-        if !this.isModal && user32.IsDialogMessage(this.hwnd, msg) {
+        if !this.isModal && w32.IsDialogMessage(this.hwnd, msg) {
             return true
         }
     }

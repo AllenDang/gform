@@ -2,7 +2,6 @@ package gform
 
 import (
 	"github.com/AllenDang/w32"
-	"github.com/AllenDang/w32/gdi32"
 )
 
 type Pen struct {
@@ -16,7 +15,7 @@ func NewPen(style uint, width uint, brush *Brush) *Pen {
         panic("Brush cannot be nil")
     }
 
-    hPen := gdi32.ExtCreatePen(style, width, brush.GetLOGBRUSH(), 0, nil)
+    hPen := w32.ExtCreatePen(style, width, brush.GetLOGBRUSH(), 0, nil)
     if hPen == 0 {
         panic("Failed to create pen")
     }
@@ -27,7 +26,7 @@ func NewPen(style uint, width uint, brush *Brush) *Pen {
 func NewNullPen() *Pen {
     lb := w32.LOGBRUSH{LbStyle: w32.BS_NULL}
 
-    hPen := gdi32.ExtCreatePen(w32.PS_COSMETIC|w32.PS_NULL, 1, &lb, 0, nil)
+    hPen := w32.ExtCreatePen(w32.PS_COSMETIC|w32.PS_NULL, 1, &lb, 0, nil)
     if hPen == 0 {
         panic("failed to create null brush")
     }
@@ -49,7 +48,7 @@ func (this *Pen) GetHPEN() w32.HPEN {
 
 func (this *Pen) Dispose() {
     if this.hPen != 0 {
-        gdi32.DeleteObject(w32.HGDIOBJ(this.hPen))
+        w32.DeleteObject(w32.HGDIOBJ(this.hPen))
         this.hPen = 0
     }
 }

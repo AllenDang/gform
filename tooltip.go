@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
     "syscall"
     "unsafe"
 )
@@ -20,7 +19,7 @@ func NewToolTip(parent Controller) *ToolTip {
 
 func (this *ToolTip) init(parent Controller) {
     this.W32Control.init("tooltips_class32", parent, w32.WS_EX_TOPMOST, w32.WS_POPUP|w32.TTS_NOPREFIX|w32.TTS_ALWAYSTIP)
-    user32.SetWindowPos(this.Handle(), w32.HWND_TOPMOST, 0, 0, 0, 0, w32.SWP_NOMOVE|w32.SWP_NOSIZE|w32.SWP_NOACTIVATE)
+    w32.SetWindowPos(this.Handle(), w32.HWND_TOPMOST, 0, 0, 0, 0, w32.SWP_NOMOVE|w32.SWP_NOSIZE|w32.SWP_NOACTIVATE)
 }
 
 func (this *ToolTip) AddTool(tool Controller, tip string) bool {
@@ -33,5 +32,5 @@ func (this *ToolTip) AddTool(tool Controller, tip string) bool {
     ti.UId = uintptr(tool.Handle())
     ti.LpszText = syscall.StringToUTF16Ptr(tip)
 
-    return user32.SendMessage(this.Handle(), w32.TTM_ADDTOOL, 0, uintptr(unsafe.Pointer(&ti))) != w32.FALSE
+    return w32.SendMessage(this.Handle(), w32.TTM_ADDTOOL, 0, uintptr(unsafe.Pointer(&ti))) != w32.FALSE
 }

@@ -2,7 +2,6 @@ package gform
 
 import (
     "github.com/AllenDang/w32"
-    "github.com/AllenDang/w32/user32"
 )
 
 type Edit struct {
@@ -41,7 +40,7 @@ func (this *Edit) OnChange() *EventManager {
 
 //Public methods
 func (this *Edit) SetReadOnly(isReadOnly bool) {
-    user32.SendMessage(this.hwnd, w32.EM_SETREADONLY, uintptr(w32.BoolToBOOL(isReadOnly)), 0)
+    w32.SendMessage(this.hwnd, w32.EM_SETREADONLY, uintptr(w32.BoolToBOOL(isReadOnly)), 0)
 }
 
 func (this *Edit) AddLine(text string) {
