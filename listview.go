@@ -107,17 +107,22 @@ func (this *ListView) InsertColumn(caption string, width int, iCol int) {
     this.InsertLvColumn(&lc, iCol)
 }
 
-func (this *ListView) InsertItem(caption string, index int) {
-    var li w32.LVITEM
-    li.Mask = w32.LVIF_TEXT
-    li.PszText = syscall.StringToUTF16Ptr(caption)
-    li.IItem = index
+func (this *ListView) AddItem(text ...string) {
+    if len(text) > 0 {
+        var li w32.LVITEM
+        li.Mask = w32.LVIF_TEXT
+        li.PszText = syscall.StringToUTF16Ptr(text[0])
+        li.IItem = this.ItemCount()
 
-    this.InsertLvItem(&li)
-}
+        this.InsertLvItem(&li)
 
-func (this *ListView) AddItem(caption string) {
-    this.InsertItem(caption, this.ItemCount())
+        for i := 1; i < len(text); i++ {
+            li.PszText = syscall.StringToUTF16Ptr(text[i])
+            li.ISubItem = i
+
+            this.SetLvItem(&li)
+        }
+    }
 }
 
 func (this *ListView) InsertLvColumn(lvColumn *w32.LVCOLUMN, iCol int) {
@@ -126,6 +131,10 @@ func (this *ListView) InsertLvColumn(lvColumn *w32.LVCOLUMN, iCol int) {
 
 func (this *ListView) InsertLvItem(lvItem *w32.LVITEM) {
     user32.SendMessage(this.hwnd, w32.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(lvItem)))
+}
+
+func (this *ListView) SetLvItem(lvItem *w32.LVITEM) {
+    user32.SendMessage(this.hwnd, w32.LVM_SETITEM, 0, uintptr(unsafe.Pointer(lvItem)))
 }
 
 func (this *ListView) DeleteAllItems() bool {
