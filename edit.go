@@ -29,7 +29,7 @@ func AttachEdit(parent Controller, id int) *Edit {
 }
 
 func (this *Edit) init(parent Controller) {
-    this.W32Control.init("EDIT", parent, w32.WS_EX_CLIENTEDGE, w32.WS_CHILD|w32.WS_VISIBLE|w32.WS_TABSTOP|w32.ES_LEFT)
+    this.W32Control.init("EDIT", parent, w32.WS_EX_CLIENTEDGE, w32.WS_CHILD|w32.WS_VISIBLE|w32.WS_TABSTOP|w32.ES_LEFT|w32.ES_MULTILINE)
     RegMsgHandler(this)
 }
 
