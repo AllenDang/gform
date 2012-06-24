@@ -62,4 +62,5 @@ type Controller interface {
 
     //Paint events
     OnPaint() *EventManager
+    OnSize() *EventManager
 }
