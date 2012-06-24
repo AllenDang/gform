@@ -5,11 +5,16 @@ import (
     "unsafe"
 )
 
+func genPoint(p uintptr) (x, y int) {
+    x = int(w32.LOWORD(uint(p)))
+    y = int(w32.HIWORD(uint(p)))
+    return
+}
+
 func genMouseEventArg(wparam, lparam uintptr) *MouseEventData {
     var data MouseEventData
     data.Button = int(wparam)
-    data.X = int(w32.LOWORD(uint(lparam)))
-    data.Y = int(w32.HIWORD(uint(lparam)))
+    data.X, data.Y = genPoint(lparam)
 
     return &data
 }
@@ -88,6 +93,9 @@ func generalWndProc(hwnd w32.HWND, msg uint, wparam, lparam uintptr) uintptr {
             controller.OnPaint().Fire(NewEventArg(controller, &PaintEventData{Canvas: canvas}))
         case w32.WM_KEYUP:
             controller.OnKeyUp().Fire(NewEventArg(controller, &KeyUpEventData{int(wparam), int(lparam)}))
+	case w32.WM_SIZE:
+            x,y := genPoint(lparam)
+            controller.OnSize().Fire(NewEventArg(controller, &SizeEventData{uint(wparam), x, y}))
         }
 
         //Trigger msg handler registered via "Bind".
