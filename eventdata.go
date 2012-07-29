@@ -36,3 +36,8 @@ type LVDBLClickEventData struct {
 type KeyUpEventData struct {
 	VKey, Code int
 }
+
+type SizeEventData struct {
+	Type uint
+	X, Y int
+}

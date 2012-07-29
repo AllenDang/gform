@@ -39,6 +39,7 @@ type ControlBase struct {
 
     // Paint events
     onPaint EventManager
+    onSize EventManager
 }
 
 func (this *ControlBase) init(parent Controller) {
@@ -265,6 +266,10 @@ func (this *ControlBase) OnMouseLeave() *EventManager {
 
 func (this *ControlBase) OnPaint() *EventManager {
     return &this.onPaint
+}
+
+func (this *ControlBase) OnSize() *EventManager {
+    return &this.onSize
 }
 
 func (this *ControlBase) OnKeyUp() *EventManager {
