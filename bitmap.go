@@ -19,8 +19,8 @@ func assembleBitmapFromHBITMAP(hbitmap w32.HBITMAP) (*Bitmap, error) {
 
 	return &Bitmap{
 		handle: hbitmap,
-		width:  dib.DsBmih.BiWidth,
-		height: dib.DsBmih.BiHeight,
+		width:  int(dib.DsBmih.BiWidth),
+		height: int(dib.DsBmih.BiHeight),
 	}, nil
 }
 
