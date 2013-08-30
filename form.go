@@ -37,7 +37,6 @@ func (this *Form) init(parent Controller) {
 func (this *Form) Center() {
 	sWidth := w32.GetSystemMetrics(w32.SM_CXFULLSCREEN)
 	sHeight := w32.GetSystemMetrics(w32.SM_CYFULLSCREEN)
-
 	if sWidth != 0 && sHeight != 0 {
 		w, h := this.Size()
 		this.SetPos((sWidth/2)-(w/2), (sHeight/2)-(h/2))
@@ -86,10 +85,11 @@ func (this *Form) WndProc(msg uint, wparam, lparam uintptr) uintptr {
 			w32.SendMessage(this.hwnd, w32.WM_NCLBUTTONDOWN, w32.HTCAPTION, 0)
 		}
 	case w32.WM_CLOSE:
-		w32.DestroyWindow(this.hwnd)
+		this.onClose.Fire(NewEventArg(this, nil))
+		return 0
 	case w32.WM_DESTROY:
 		w32.PostQuitMessage(0)
+		return 0
 	}
-
 	return w32.DefWindowProc(this.hwnd, uint32(msg), wparam, lparam)
 }
